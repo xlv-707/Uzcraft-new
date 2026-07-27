@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UZCRAFT — Add Product</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme.css">
+    <style>
+        /* ============================================================
+           CSS VARIABLES & THEMING
+           ============================================================ */
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: background var(--transition-slow), color var(--transition-slow);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: var(--radius-full); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: var(--spacing-lg) var(--spacing-md);
+            overflow-y: auto;
+            transition: transform var(--transition-slow), background var(--transition-slow);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: 0 var(--spacing-sm);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .sidebar .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+            box-shadow: var(--shadow-gold);
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo h2 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar .nav-section {
+            margin-top: var(--spacing-xl);
+        }
+
+        .sidebar .nav-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 0 var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .sidebar .menu-item {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .sidebar .menu-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            transition: all var(--transition-base);
+            flex-shrink: 0;
+        }
+
+        .sidebar .menu-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .sidebar .menu-item.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .sidebar .menu-item.active i {
+            color: #fff;
+        }
+
+        .sidebar .arrow {
+            margin-left: auto;
+            transition: transform var(--transition-base);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .sidebar .arrow.rotate { transform: rotate(180deg); }
+
+        .sidebar .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow);
+            margin-left: var(--spacing-lg);
+            padding-left: var(--spacing-md);
+            border-left: 2px solid var(--border-color);
+        }
+
+        .sidebar .submenu.show { max-height: 200px; }
+
+        .sidebar .submenu-item {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 13px;
+            transition: all var(--transition-fast);
+            border-radius: var(--radius-sm);
+            padding-left: var(--spacing-sm);
+        }
+
+        .sidebar .submenu-item:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+
+        .sidebar .submenu-item.active {
+            color: var(--gold);
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            background: var(--bg-primary);
+            transition: background var(--transition-slow);
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            height: 64px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            padding: 0 var(--spacing-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background var(--transition-slow);
+        }
+
+        .topbar .menu-btn {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 22px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .menu-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .topbar .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .topbar .icon-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 17px;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .topbar .icon-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar .badge {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 17px;
+            height: 17px;
+            border-radius: var(--radius-full);
+            background: #e53e3e;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .topbar .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 3px 10px 3px 3px;
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .admin-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .topbar .admin-btn .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--gold-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .topbar .admin-btn .admin-info {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .topbar .admin-btn .admin-info h4 {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .topbar .admin-btn .admin-info p {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .topbar .dropdown {
+            position: relative;
+        }
+
+        .topbar .dropdown-menu {
+            position: absolute;
+            top: calc(100% + var(--spacing-sm));
+            right: 0;
+            min-width: 260px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            display: none;
+            overflow: hidden;
+            z-index: 999;
+            padding: var(--spacing-sm);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .topbar .dropdown.active .dropdown-menu {
+            display: block;
+            animation: dropIn 0.25s ease;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .topbar .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .dropdown-menu a:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar .dropdown-menu a i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .topbar .dropdown-menu .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: var(--spacing-sm) 0;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: var(--spacing-lg) var(--spacing-xl) 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .page-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h1 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 1px;
+        }
+
+        .page-header .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .page-header .breadcrumb a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .page-header .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ===== PAGE LAYOUT ===== */
+        .page-layout {
+            display: grid;
+            grid-template-columns: 320px minmax(420px, 1fr) 300px;
+            gap: var(--spacing-md);
+            align-items: start;
+            max-width: 1500px;
+        }
+
+        /* ===== UPLOAD CARD ===== */
+        .upload-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-slow);
+        }
+
+        .upload-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .upload-card .card-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .upload-card .card-title h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .upload-card .card-title i {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .upload-box {
+            height: 150px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            background: var(--bg-tertiary);
+        }
+
+        .upload-box:hover {
+            border-color: var(--gold);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .upload-box i {
+            font-size: 36px;
+            color: var(--gold);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .upload-box h4 {
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .upload-box p {
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-xs);
+            font-size: 13px;
+        }
+
+        .upload-box span {
+            color: var(--gold);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .upload-box small {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .preview-grid {
+            margin-top: var(--spacing-sm);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-xs);
+        }
+
+        .preview-item {
+            position: relative;
+            height: 70px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .preview-item:hover {
+            border-color: var(--gold);
+            transform: scale(1.02);
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            font-size: 10px;
+            color: #e53e3e;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-item .remove-btn:hover {
+            background: #e53e3e;
+            color: #fff;
+        }
+
+        .add-more {
+            width: 100%;
+            height: 60px;
+            margin-top: var(--spacing-xs);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-sm);
+            cursor: pointer;
+            color: var(--gold);
+            transition: all var(--transition-base);
+            background: var(--bg-tertiary);
+        }
+
+        .add-more:hover {
+            border-color: var(--gold);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .add-more i { font-size: 20px; }
+        .add-more span { font-weight: 500; font-size: 13px; }
+
+        /* ===== PRODUCT FORM ===== */
+        .product-form-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-slow);
+        }
+
+        .product-form-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+
+        .form-group label .required {
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            height: 38px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-md);
+            outline: none;
+            font-size: 13px;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            background: var(--bg-tertiary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 3px rgba(176, 138, 90, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 60px;
+            resize: vertical;
+            padding-top: var(--spacing-sm);
+            height: auto;
+        }
+
+        .form-group .full-description {
+            min-height: 80px !important;
+        }
+
+        .form-group small {
+            margin-top: 2px;
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-sm);
+        }
+
+        /* ===== PREVIEW CARD ===== */
+        .preview-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 84px;
+            transition: all var(--transition-slow);
+        }
+
+        .preview-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-card .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .preview-card .preview-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .preview-card .preview-header i {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .preview-card .preview-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            background: var(--bg-tertiary);
+        }
+
+        .preview-card .preview-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .preview-card .preview-image .favorite-btn {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            font-size: 14px;
+            color: #e53e3e;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .preview-card .preview-image .favorite-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-card .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            z-index: 5;
+        }
+
+        .preview-card .slider-btn:hover {
+            background: #fff;
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .preview-card .slider-btn.left { left: var(--spacing-xs); }
+        .preview-card .slider-btn.right { right: var(--spacing-xs); }
+
+        .preview-card .dots {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-sm) 0 var(--spacing-xs);
+        }
+
+        .preview-card .dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: var(--radius-full);
+            background: var(--border-color);
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .preview-card .dots .active-dot {
+            background: var(--gold);
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        .preview-card h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .preview-card .preview-price {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .preview-card .rating {
+            color: #f6b83e;
+            font-size: 13px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .preview-card .rating span {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .preview-card .preview-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .preview-card .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .preview-card .product-info div {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .preview-card .product-info div i {
+            width: 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .action-buttons .draft-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .action-buttons .draft-btn:hover {
+            border-color: var(--gold);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-buttons .publish-btn {
+            padding: 10px 28px;
+            border: none;
+            background: var(--primary-gradient);
+            color: #fff;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .action-buttons .publish-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(49, 82, 54, 0.3);
+        }
+
+        .action-buttons .publish-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1400px) {
+            .page-layout {
+                grid-template-columns: 290px minmax(360px, 1fr) 270px;
+                gap: var(--spacing-sm);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .page-layout {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-md);
+            }
+            .preview-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main {
+                margin-left: 0;
+            }
+            .topbar .menu-btn {
+                display: block;
+            }
+            .topbar .admin-btn .admin-info {
+                display: none;
+            }
+            .content {
+                padding: var(--spacing-md) var(--spacing-md) 0;
+            }
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .preview-card .preview-image img {
+                height: 180px;
+            }
+            .upload-box {
+                height: 130px;
+            }
+            .upload-box i {
+                font-size: 30px;
+            }
+            .upload-box h4 {
+                font-size: 13px;
+            }
+            .preview-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .preview-item {
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 0 var(--spacing-md);
+                height: 56px;
+            }
+            .topbar .topbar-right {
+                gap: 4px;
+            }
+            .topbar .admin-btn {
+                padding: 3px;
+            }
+            .topbar .admin-btn .avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+            .topbar .icon-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            .topbar .dropdown-menu {
+                right: -40px;
+                min-width: 200px;
+            }
+            .page-header h1 {
+                font-size: 20px;
+            }
+            .page-header .breadcrumb {
+                font-size: 11px;
+            }
+            .content {
+                padding: var(--spacing-sm) var(--spacing-sm) 0;
+            }
+            .product-form-card {
+                padding: var(--spacing-sm) var(--spacing-sm);
+            }
+            .upload-card {
+                padding: var(--spacing-sm) var(--spacing-sm);
+            }
+            .preview-card {
+                padding: var(--spacing-sm) var(--spacing-sm);
+            }
+            .preview-card .preview-image img {
+                height: 150px;
+            }
+            .preview-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--spacing-xs);
+            }
+            .preview-item {
+                height: 50px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .action-buttons .draft-btn,
+            .action-buttons .publish-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .upload-box {
+                height: 110px;
+            }
+            .upload-box i {
+                font-size: 26px;
+            }
+            .upload-box h4 {
+                font-size: 12px;
+            }
+            .add-more {
+                height: 48px;
+            }
+            .add-more i {
+                font-size: 16px;
+            }
+            .add-more span {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .preview-item {
+                height: 50px;
+            }
+            .page-header h1 {
+                font-size: 17px;
+            }
+            .page-header p {
+                font-size: 12px;
+            }
+        }
+
+        .sidebar.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="logo">
+        <div class="logo-icon">U</div>
+        <h2>UZCRAFT</h2>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Main</div>
+        <a href="../html/dashboard.html" class="menu-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Commerce</div>
+        <div class="product-section">
+            <div class="menu-item active" id="productsBtn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>Products</span>
+                <i class="fa-solid fa-chevron-down arrow"></i>
+            </div>
+            <div class="submenu show" id="productsSubmenu">
+                <a href="../html/all-products.html" class="submenu-item">All Products</a>
+                <a href="../html/admin-product-stock.html" class="submenu-item active" style="color:var(--gold);">Add Product</a>
+            </div>
+        </div>
+        <a href="../html/orders.html" class="menu-item">
+            <i class="fa-solid fa-box"></i>
+            <span>Orders</span>
+            <span class="badge" style="margin-left:auto;background:var(--gold);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:var(--radius-full);">12</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Management</div>
+        <a href="../html/users.html" class="menu-item">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+        </a>
+        <a href="../html/settings.html" class="menu-item">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar" role="banner">
+        <button id="menuBtn" class="menu-btn" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="topbar-right">
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                <i class="fa-regular fa-moon"></i>
+            </button>
+
+            <div class="dropdown">
+                <button class="icon-btn dropdown-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <h4>Notifications</h4>
+                        <p>You have 5 unread notifications</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Order</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">#ORD-2024 from John Doe</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Customer</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">Jane Smith registered</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;">
+                        <strong style="font-size:13px;color:var(--text-primary);">Product Updated</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">3 products updated</p>
+                    </div>
+                    <div class="divider"></div>
+                    <a href="#"><i class="fa-regular fa-bell"></i> View all notifications</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="admin-btn dropdown-btn">
+                    <div class="avatar">A</div>
+                    <div class="admin-info">
+                        <h4>Admin</h4>
+                        <p>Super Admin</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fa-regular fa-user"></i> Profile</a>
+                    <a href="../html/settings.html"><i class="fa-regular fa-gear"></i> Settings</a>
+                    <div class="divider"></div>
+                    <a href="#" id="logoutBtn" style="color:#e53e3e;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Add <span>Product</span></h1>
+                <p>Create a new product with images, details and pricing</p>
+            </div>
+            <div class="breadcrumb">
+                <a href="#">Home</a>
+                <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+                <a href="#">Products</a>
+                <i class="fa-solid fa-chevron-right" style="font-size:10px;"></i>
+                <span style="color:var(--text-secondary);font-weight:500;">Add Product</span>
+            </div>
+        </div>
+
+        <!-- Layout -->
+        <div class="page-layout">
+
+            <!-- LEFT: Upload -->
+            <div class="upload-card">
+                <div class="card-title">
+                    <h3>📸 Product Images</h3>
+                    <i class="fa-solid fa-circle-info" title="Upload up to 10 images"></i>
+                </div>
+
+                <div class="upload-box" id="uploadBox">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h4>Drag & drop images here</h4>
+                    <p>or <span>click to browse</span></p>
+                    <small>PNG, JPG or WEBP (max. 5MB)</small>
+                    <input type="file" id="imageInput" multiple hidden accept="image/*">
+                </div>
+
+                <div class="preview-grid" id="previewGrid"></div>
+
+                <div class="add-more" id="addMoreBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add More Images</span>
+                </div>
+            </div>
+
+            <!-- MIDDLE: Form -->
+            <div class="product-form-card">
+                <div class="form-group">
+                    <label>Product Name <span class="required">*</span></label>
+                    <input type="text" id="productName" placeholder="Enter product name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category <span class="required">*</span></label>
+                        <select id="category">
+                            <option value="">Select category</option>
+                            <option value="Ceramics">Ceramics</option>
+                            <option value="Textiles">Textiles</option>
+                            <option value="Embroidery">Embroidery</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Jewelry">Jewelry</option>
+                            <option value="Wood Crafts">Wood Crafts</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Metalware">Metalware</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Bags">Bags</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sub Category</label>
+                        <select id="subCategory">
+                            <option value="">Select sub category</option>
+                            <option value="Handmade">Handmade</option>
+                            <option value="Traditional">Traditional</option>
+                            <option value="Modern">Modern</option>
+                            <option value="Luxury">Luxury</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (USD) <span class="required">*</span></label>
+                        <input type="number" id="price" placeholder="$ 0.00" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Discount Price</label>
+                        <input type="number" id="discountPrice" placeholder="$ 0.00" step="0.01">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Stock Quantity <span class="required">*</span></label>
+                        <input type="number" id="stock" placeholder="Enter stock quantity">
+                    </div>
+
+                    <div class="form-group">
+                        <label>SKU</label>
+                        <input type="text" id="sku" placeholder="Enter SKU">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Short Description <span class="required">*</span></label>
+                    <textarea id="shortDescription" placeholder="Write short description..." maxlength="150"></textarea>
+                    <small id="charCount">0 / 150</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Description <span class="required">*</span></label>
+                    <textarea id="fullDescription" class="full-description" placeholder="Write product full description..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Materials</label>
+                        <input type="text" id="materials" placeholder="e.g. Ceramic, Clay, Glaze">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Region / City <span class="required">*</span></label>
+                        <select id="region">
+                            <option value="">Select region</option>
+                            <option value="Tashkent">Tashkent</option>
+                            <option value="Samarkand">Samarkand</option>
+                            <option value="Bukhara">Bukhara</option>
+                            <option value="Khiva">Khiva</option>
+                            <option value="Andijan">Andijan</option>
+                            <option value="Fergana">Fergana</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Preview -->
+            <div class="preview-card">
+                <div class="preview-header">
+                    <h3>👁️ Live Preview</h3>
+                    <i class="fa-regular fa-eye"></i>
+                </div>
+
+                <div class="preview-image" id="previewImageContainer">
+                    <img id="previewImage" src="https://placehold.co/400x180/f0f2f8/8f8f8f?text=No+Image" alt="Preview">
+                    <button class="favorite-btn" id="favoriteBtn">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <button class="slider-btn left" id="prevImage"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="slider-btn right" id="nextImage"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <div class="dots" id="dotsContainer">
+                    <span class="active-dot"></span>
+                </div>
+
+                <h2 id="previewTitle">Product Name</h2>
+                <div class="preview-price" id="previewPrice">$0.00</div>
+                <div class="rating">★★★★★ <span>(0 reviews)</span></div>
+                <p class="preview-desc" id="previewDescription">Product description will appear here</p>
+
+                <div class="product-info">
+                    <div><i class="fa-regular fa-folder"></i> <span id="previewCategory">Uncategorized</span></div>
+                    <div><i class="fa-solid fa-location-dot"></i> <span id="previewRegion">Not set</span></div>
+                    <div><i class="fa-solid fa-circle-check"></i> <span id="previewStock">In Stock: 0 items</span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="draft-btn" id="saveDraftBtn">
+                <i class="fa-regular fa-floppy-disk"></i> Save Draft
+            </button>
+            <button class="publish-btn" id="publishBtn">
+                <i class="fa-solid fa-cloud-upload-alt"></i> Publish Product
+            </button>
+        </div>
+
+    </div>
+
+</div>
+<script src="../js/theme.js"></script>
+<script>
+// ============================================================
+// DOM REFERENCES
+// ============================================================
+const imageInput = document.getElementById("imageInput");
+const uploadBox = document.getElementById("uploadBox");
+const addMoreBtn = document.getElementById("addMoreBtn");
+const previewGrid = document.getElementById("previewGrid");
+const previewImage = document.getElementById("previewImage");
+const previewImageContainer = document.getElementById("previewImageContainer");
+
+const productName = document.getElementById("productName");
+const previewTitle = document.getElementById("previewTitle");
+const price = document.getElementById("price");
+const previewPrice = document.getElementById("previewPrice");
+const shortDescription = document.getElementById("shortDescription");
+const previewDescription = document.getElementById("previewDescription");
+const charCount = document.getElementById("charCount");
+const category = document.getElementById("category");
+const previewCategory = document.getElementById("previewCategory");
+const region = document.getElementById("region");
+const previewRegion = document.getElementById("previewRegion");
+const stock = document.getElementById("stock");
+const previewStock = document.getElementById("previewStock");
+const favoriteBtn = document.getElementById("favoriteBtn");
+const prevImageBtn = document.getElementById("prevImage");
+const nextImageBtn = document.getElementById("nextImage");
+const saveDraftBtn = document.getElementById("saveDraftBtn");
+const publishBtn = document.getElementById("publishBtn");
+const dotsContainer = document.getElementById("dotsContainer");
+
+let uploadedImages = [];
+let currentImageIndex = 0;
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("show");
+});
+
+document.addEventListener("click", (e) => {
+    if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+            sidebar.classList.remove("show");
+        }
+    }
+});
+
+// ============================================================
+// DROPDOWNS
+// ============================================================
+document.querySelectorAll(".dropdown-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const dropdown = btn.closest(".dropdown");
+        document.querySelectorAll(".dropdown").forEach(item => {
+            if (item !== dropdown) item.classList.remove("active");
+        });
+        dropdown.classList.toggle("active");
+    });
+});
+
+document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown").forEach(item => {
+        item.classList.remove("active");
+    });
+});
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("currentUser");
+    window.location.href = "/login/html/index.html";
+});
+
+// ============================================================
+// PRODUCTS SUBMENU
+// ============================================================
+const productsBtn = document.getElementById("productsBtn");
+const productsSubmenu = document.getElementById("productsSubmenu");
+const arrow = document.querySelector(".arrow");
+
+productsBtn.addEventListener("click", () => {
+    productsSubmenu.classList.toggle("show");
+    arrow.classList.toggle("rotate");
+});
+
+// ============================================================
+// IMAGE UPLOAD
+// ============================================================
+uploadBox.addEventListener("click", () => imageInput.click());
+addMoreBtn.addEventListener("click", () => imageInput.click());
+
+imageInput.addEventListener("change", function() {
+    [...this.files].forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedImages.push(e.target.result);
+            if (uploadedImages.length === 1) {
+                previewImage.src = e.target.result;
+            }
+            createThumbnail(e.target.result);
+            updateDots();
+        };
+        reader.readAsDataURL(file);
+    });
+    this.value = "";
+});
+
+function createThumbnail(imageSrc) {
+    const item = document.createElement("div");
+    item.className = "preview-item";
+    item.innerHTML = `
+        <img src="${imageSrc}" class="thumb-image">
+        <button class="remove-btn">✕</button>
+    `;
+
+    item.querySelector(".thumb-image").addEventListener("click", () => {
+        currentImageIndex = uploadedImages.indexOf(imageSrc);
+        previewImage.src = imageSrc;
+        updateDots();
+    });
+
+    item.querySelector(".remove-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const index = uploadedImages.indexOf(imageSrc);
+        if (index > -1) {
+            uploadedImages.splice(index, 1);
+        }
+        item.remove();
+        if (uploadedImages.length > 0) {
+            currentImageIndex = Math.min(currentImageIndex, uploadedImages.length - 1);
+            previewImage.src = uploadedImages[currentImageIndex];
+        } else {
+            previewImage.src = "https://placehold.co/400x180/f0f2f8/8f8f8f?text=No+Image";
+        }
+        updateDots();
+    });
+
+    previewGrid.appendChild(item);
+}
+
+// ============================================================
+// DOTS
+// ============================================================
+function updateDots() {
+    dotsContainer.innerHTML = "";
+    if (uploadedImages.length === 0) {
+        const dot = document.createElement("span");
+        dot.className = "active-dot";
+        dotsContainer.appendChild(dot);
+        return;
+    }
+    uploadedImages.forEach((_, index) => {
+        const dot = document.createElement("span");
+        if (index === currentImageIndex) dot.className = "active-dot";
+        dot.addEventListener("click", () => {
+            currentImageIndex = index;
+            previewImage.src = uploadedImages[index];
+            updateDots();
+        });
+        dotsContainer.appendChild(dot);
+    });
+}
+
+// ============================================================
+// SLIDER
+// ============================================================
+nextImageBtn.addEventListener("click", () => {
+    if (uploadedImages.length === 0) return;
+    currentImageIndex = (currentImageIndex + 1) % uploadedImages.length;
+    previewImage.src = uploadedImages[currentImageIndex];
+    updateDots();
+});
+
+prevImageBtn.addEventListener("click", () => {
+    if (uploadedImages.length === 0) return;
+    currentImageIndex = (currentImageIndex - 1 + uploadedImages.length) % uploadedImages.length;
+    previewImage.src = uploadedImages[currentImageIndex];
+    updateDots();
+});
+
+// ============================================================
+// FAVORITE
+// ============================================================
+favoriteBtn.addEventListener("click", () => {
+    const icon = favoriteBtn.querySelector("i");
+    icon.classList.toggle("fa-solid");
+    icon.classList.toggle("fa-regular");
+});
+
+// ============================================================
+// FORM LIVE PREVIEW
+// ============================================================
+productName.addEventListener("input", () => {
+    previewTitle.textContent = productName.value || "Product Name";
+});
+
+price.addEventListener("input", () => {
+    previewPrice.textContent = "$" + (price.value || "0.00");
+});
+
+shortDescription.addEventListener("input", () => {
+    charCount.textContent = shortDescription.value.length + " / 150";
+    previewDescription.textContent = shortDescription.value || "Product description will appear here";
+});
+
+category.addEventListener("change", () => {
+    previewCategory.textContent = category.value || "Uncategorized";
+});
+
+region.addEventListener("change", () => {
+    previewRegion.textContent = region.value || "Not set";
+});
+
+stock.addEventListener("input", () => {
+    previewStock.textContent = "In Stock: " + (stock.value || 0) + " items";
+});
+
+// ============================================================
+// SAVE DRAFT
+// ============================================================
+saveDraftBtn.addEventListener("click", () => {
+    const product = {
+        name: productName.value,
+        price: price.value,
+        category: category.value,
+        stock: stock.value,
+        description: shortDescription.value,
+        region: region.value,
+        images: uploadedImages
+    };
+    localStorage.setItem("draftProduct", JSON.stringify(product));
+    alert("✅ Draft saved successfully!");
+});
+
+// ============================================================
+// PUBLISH
+// ============================================================
+publishBtn.addEventListener("click", async () => {
+    const name = productName.value.trim();
+    const priceVal = price.value;
+    const cat = category.value;
+    const stockVal = stock.value;
+    const desc = shortDescription.value.trim();
+
+    if (!name || !priceVal || !cat || !stockVal || !desc || uploadedImages.length === 0) {
+        alert("⚠️ Please fill in all required fields and upload at least one image.");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/api/products", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                price: priceVal,
+                category: cat,
+                stock: stockVal,
+                region: region.value,
+                description: desc,
+                fullDescription: document.getElementById("fullDescription").value,
+                materials: document.getElementById("materials").value,
+                image: uploadedImages[0],
+                gallery: uploadedImages
+            })
+        });
+        const data = await response.json();
+        alert(data.message || "✅ Product published successfully!");
+
+        // Reset form
+        productName.value = "";
+        price.value = "";
+        category.value = "";
+        stock.value = "";
+        shortDescription.value = "";
+        document.getElementById("fullDescription").value = "";
+        document.getElementById("materials").value = "";
+        document.getElementById("subCategory").value = "";
+        document.getElementById("discountPrice").value = "";
+        document.getElementById("sku").value = "";
+        region.value = "";
+        uploadedImages = [];
+        previewGrid.innerHTML = "";
+        previewImage.src = "https://placehold.co/400x180/f0f2f8/8f8f8f?text=No+Image";
+        updateDots();
+        previewTitle.textContent = "Product Name";
+        previewPrice.textContent = "$0.00";
+        previewDescription.textContent = "Product description will appear here";
+        previewCategory.textContent = "Uncategorized";
+        previewRegion.textContent = "Not set";
+        previewStock.textContent = "In Stock: 0 items";
+        charCount.textContent = "0 / 150";
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("❌ Server connection error. Please try again.");
+    }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+updateDots();
+
+// Load draft if exists
+const draft = localStorage.getItem("draftProduct");
+if (draft) {
+    try {
+        const data = JSON.parse(draft);
+        if (data.name) productName.value = data.name;
+        if (data.price) price.value = data.price;
+        if (data.category) category.value = data.category;
+        if (data.stock) stock.value = data.stock;
+        if (data.description) shortDescription.value = data.description;
+        if (data.region) region.value = data.region;
+        if (data.images && data.images.length > 0) {
+            data.images.forEach(img => {
+                uploadedImages.push(img);
+                createThumbnail(img);
+            });
+            previewImage.src = uploadedImages[0];
+            updateDots();
+        }
+        productName.dispatchEvent(new Event('input'));
+        price.dispatchEvent(new Event('input'));
+        shortDescription.dispatchEvent(new Event('input'));
+        category.dispatchEvent(new Event('change'));
+        region.dispatchEvent(new Event('change'));
+        stock.dispatchEvent(new Event('input'));
+    } catch (e) {}
+}
+</script>
+<!-- Til tizimi -->
+<script src="../js/lang.js"></script>
+<script src="../js/app-core.js"></script>
+<script src="../js/page-settings.js"></script>
+</body>
+</html>

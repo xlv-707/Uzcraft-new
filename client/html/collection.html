@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/collection.css">
+    <link rel="icon" href="/img/f39c7b05-a1e3-4123-b077-35e9f6dd4903.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100">
+                <!-- Tashqi shakl -->
+                <polygon
+                    points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <!-- Ichki naqsh -->
+                <circle cx="50" cy="50" r="6"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="18"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="30"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <!-- Gul yaproqlari -->
+                <ellipse cx="50" cy="20" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="50" cy="80" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="20" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="80" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="30" rx="5" ry="10"
+                    transform="rotate(-45 30 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="30" rx="5" ry="10"
+                    transform="rotate(45 70 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="70" rx="5" ry="10"
+                    transform="rotate(45 30 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="70" rx="5" ry="10"
+                    transform="rotate(-45 70 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+            </svg>
+
+            <div class="brand-text">
+                <h1>UZCRAFT</h1>
+                <p>MADE IN UZBEKISTAN</p>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+
+            <li><a href="../html/index.html" data-key="home">Home</a></li>
+            <li><a href="../html/collection.html" class="active" data-key="collections">Collections</a></li>
+            <li><a data-key="new" href="../html/catigories.html">Categories</a></li>
+            <li><a data-key="about" href="../html/about.html">About</a></li>
+            <li><a data-key="contact" href="../html/contact.html">Contact</a></li>
+
+        </ul>
+
+        <div class="nav-icons">
+            
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-user" id="userIcon" style="cursor:pointer;"></i>
+            <span id="userName"></span>
+
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-overlay"></div>
+    </nav>
+
+
+    <section class="collections">
+
+        <div class="collections-header">
+            <span class="span-li">
+                <li><a href="../html/index.html" data-key="home">Home</a></li>
+                >
+            <li><a href="../html/collection.html" data-key="collections">Collections</a></li>
+            </span>
+            
+
+            <h1>
+                Our Collections,<br>
+                <span style="color:#1F1F1F;">Our</span>
+                <span style="color:#B08A5A;">Pride</span>
+            </h1>
+
+            <span class="arrow">→</span>
+
+            <p class="desc">
+                Discover a handpicked selection of authentic <br>
+                Uzbek crafts, each piece telling a story of <br>
+                heritage, skill, and timeless beauty.
+            </p>
+        </div>
+
+    </section>
+
+    <section class="woodwork">
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (20).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (21).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (22).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (23).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (24).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (25).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (26).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+
+        <div class="woodwork-box">
+            <img src="/img/image-removebg-preview (27).png" alt="">
+            <h4>Ceramics</h4>
+            <p>32 items</p>
+        </div>
+        
+    </section>
+
+    <section class="featured">
+
+        <div class="featured-title">
+            <h2>Featured Collections</h2>
+            <a href="#">
+                View all collections
+                <span>→</span>
+            </a>
+        </div>
+
+        <div class="featured-cards">
+
+            <div class="featured-card">
+                <img src="/img/image 34.png" alt="">
+
+                <div class="card-overlay">
+                    <h3>Timeless Ceramics</h3>
+                    <p>
+                        Exquisite hand-painted ceramics inspired by centuries of tradition.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>32 Items</span>
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="featured-card">
+                <img src="/img/image 35.png" alt="">
+
+                <div class="card-overlay">
+                    <h3>Traditional Textiles</h3>
+                    <p>
+                        Handwoven fabrics with vibrant patterns and rich history.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>45 Items</span>
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="featured-card">
+                <img src="/img/image 36.png" alt="">
+
+                <div class="card-overlay">
+                    <h3>Handcrafted Woodwork</h3>
+                    <p>
+                        Beautifully carved wood pieces made by master artisans.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>28 Items</span>
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="featured-card">
+                <img src="/img/image 37.png" alt="">
+
+                <div class="card-overlay">
+                    <h3>Elegant Jewelry</h3>
+                    <p>
+                        Unique designs that reflect Uzbek elegance and charm.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>24 Items</span>
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="featured-card">
+                <img src="/img/image 38.png" alt="">
+
+                <div class="card-overlay">
+                    <h3>Home Décor</h3>
+                    <p>
+                        Add a touch of Uzbek heritage to your living space.
+                    </p>
+
+                    <div class="card-footer">
+                        <span>36 Items</span>
+                        <button>→</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="promo-section">
+
+        <div class="promo-card">
+            <div class="promo-content1">
+                <h2>
+                    Authentic. Handcrafted.
+                    <br>
+                    Made with Love.
+                </h2>
+
+                <p>
+                    Every piece in our collection is made by skilled artisans
+                    using traditional techniques passed down for generations.
+                </p>
+
+                <a class="learn" href="#">
+                    LEARN MORE ABOUT OUR ARTISANS
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="promo-card">
+            <div class="promo-content">
+                <h2>
+                    Looking for the
+                    <br>
+                    Perfect Gift?
+                </h2>
+
+                <p>
+                    Explore our gift sets, carefully
+                    curated for your loved ones.
+                </p>
+
+                <a href="#">
+                    BROWSE GIFT SETS
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+    <section class="trust-section">
+
+        <div class="trust-card">
+            <img class="trust-card-img1" src="/img/add01bb3-98f5-44e6-a61a-0d9925c8f319_removalai_preview.png" alt="">
+            <div>
+                <h3>Handcrafted with love</h3>
+                <p>Made by skilled Uzbek artisans</p>
+            </div>
+        </div>
+
+        <div class="trust-card">
+            <img class="trust-card-img" src="/img/7ce96480-453f-4720-bccf-cd63269aee36_removalai_preview.png" alt="">
+            <div>
+                <h3>100% Authentic</h3>
+                <p>Genuine Uzbek crafts and materials</p>
+            </div>
+        </div>
+
+        <div class="trust-card">
+            <img class="trust-card-img" src="/img/fb8e40b5-1529-48db-b5b4-e9074cbee611_removalai_preview.png" alt="">
+            <div>
+                <h3>Worldwide Shipping</h3>
+                <p>Delivering beauty to your door</p>
+            </div>
+        </div>
+
+        <div class="trust-card">
+            <img class="trust-card-img" src="/img/4000bcf3-d487-420e-9daa-01f07e2a5dc3_removalai_preview.png" alt="">
+            <div>
+                <h3>Secure Payments</h3>
+                <p>Your payment is safe and protected</p>
+            </div>
+        </div>
+
+        <div class="trust-card">
+            <img class="trust-card-img" src="/img/43f0bd2d-f113-43c8-acef-328b1c62d7cc_removalai_preview.png" alt="">
+            <div>
+                <h3>14-Day Returns</h3>
+                <p>Easy returns within 14 days</p>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="newsletter">
+
+        <div class="newsletter-content">
+
+            <div class="newsletter-left">
+                <h2>Stay Connected</h2>
+
+                <p>
+                    Subscribe to our newsletter and be the first to know about
+                    new collections, special offers, and stories from Uzbekistan.
+                </p>
+            </div>
+
+            <div class="newsletter-right">
+                <input type="email" placeholder="Enter your email address">
+                <button>SUBSCRIBE</button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer class="footer">
+
+        <div class="footer-top">
+
+            <div class="footer-logo-section">
+                <h2 class="logo">UZCRAFT</h2>
+                <p>
+                    Bringing the authentic spirit of Uzbekistan
+                    to your home through handcrafted goods made
+                    with love and tradition.
+                </p>
+
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>SHOP</h3>
+                <a href="#">Ceramics</a>
+                <a href="#">Textiles</a>
+                <a href="#">Wooden Crafts</a>
+                <a href="#">Jewelry</a>
+                <a href="#">Accessories</a>
+                <a href="#">Gift Ideas</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>CUSTOMER SERVICE</h3>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping & Delivery</a>
+                <a href="#">Returns & Exchanges</a>
+                <a href="#">Track Your Order</a>
+                <a href="#">Contact Us</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>COMPANY</h3>
+                <a href="#">About Us</a>
+                <a href="#">Our Story</a>
+                <a href="#">Artisan Partnerships</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>© 2024 Uzcraft. All rights reserved.</p>
+
+            <div class="footer-features">
+                <span>🔒 Secure payment</span>
+                <span>↩ 14-day returns</span>
+                <span>🛡 Quality guaranteed</span>
+            </div>
+
+            <div class="language">
+                EN ▼
+            </div>
+
+        </div>
+
+    </footer>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="../js/chat-widget.js"></script>
+    <script src="../js/collection.js"></script>
+<script src="/admin/js/app-core.js"></script>
+<script src="/admin/js/page-settings.js"></script>
+<script src="../js/client-actions.js"></script>
+</body>
+</html>

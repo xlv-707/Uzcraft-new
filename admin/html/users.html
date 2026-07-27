@@ -1,0 +1,3999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UZCRAFT — Users</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/theme.css">
+
+    <style>
+        /* ============================================================
+           CSS VARIABLES
+           ============================================================ */
+    
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: var(--radius-full); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        /* ============================================================
+           SIDEBAR
+           ============================================================ */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 16px;
+            overflow-y: auto;
+            transition: transform 0.3s, background 0.3s;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px;
+            margin-bottom: 32px;
+        }
+
+        .sidebar .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+            box-shadow: var(--shadow-gold);
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo h2 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar .nav-section { margin-top: 24px; }
+        .sidebar .nav-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 0 8px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar .menu-item {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            padding: 0 12px;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .sidebar .menu-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar .menu-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .sidebar .menu-item.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: var(--shadow-gold);
+        }
+        .sidebar .menu-item.active i { color: #fff; }
+
+        .sidebar .menu-item .notif-badge {
+            position: absolute;
+            right: 10px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            border: 2px solid var(--bg-secondary);
+        }
+        .sidebar .menu-item .notif-badge.show { display: flex; }
+
+        .sidebar .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .sidebar .arrow.rotate { transform: rotate(180deg); }
+
+        .sidebar .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+            margin-left: 20px;
+            padding-left: 12px;
+            border-left: 2px solid var(--border-color);
+        }
+        .sidebar .submenu.show { max-height: 200px; }
+
+        .sidebar .submenu-item {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 13px;
+            transition: all 0.15s;
+            border-radius: 4px;
+            padding-left: 8px;
+        }
+        .sidebar .submenu-item:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+        .sidebar .submenu-item.active { color: var(--gold); }
+
+        /* ============================================================
+           MAIN
+           ============================================================ */
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            background: var(--bg-primary);
+            transition: background 0.3s;
+        }
+
+        /* ============================================================
+           TOPBAR
+           ============================================================ */
+        .topbar {
+            height: 72px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        .topbar .menu-btn {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 22px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+        .topbar .menu-btn:hover { background: var(--bg-tertiary); }
+
+        .topbar .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .topbar .icon-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: all 0.15s;
+            position: relative;
+        }
+        .topbar .icon-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar .badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: var(--radius-full);
+            background: #ef4444;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .topbar .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 4px 12px 4px 4px;
+            border-radius: var(--radius-full);
+            transition: all 0.15s;
+        }
+        .topbar .admin-btn:hover { background: var(--bg-tertiary); }
+
+        .topbar .admin-btn .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--gold-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .topbar .admin-btn .admin-info { text-align: left; line-height: 1.2; }
+        .topbar .admin-btn .admin-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .topbar .admin-btn .admin-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           DROPDOWN
+           ============================================================ */
+        .dropdown { position: relative; }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 280px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            display: none;
+            overflow: hidden;
+            z-index: 999;
+            padding: 8px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .dropdown.active .dropdown-menu {
+            display: block;
+            animation: dropIn 0.2s ease;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.15s;
+        }
+        .dropdown-menu a:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .dropdown-menu a i { width: 20px; text-align: center; font-size: 16px; }
+        .dropdown-menu .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 8px 0;
+        }
+
+        /* ============================================================
+           CONTENT
+           ============================================================ */
+        .content { padding: 24px 24px 0; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+        .page-header h1 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .page-header .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .page-header .breadcrumb a { color: var(--gold); text-decoration: none; }
+        .page-header .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ============================================================
+           STATS ROW
+           ============================================================ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+
+        .stat-box .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .stat-box .stat-icon.blue { background: #e6f0ff; color: #1a6bd4; }
+        .stat-box .stat-icon.green { background: #e6f7ee; color: #0f7b3a; }
+        .stat-box .stat-icon.orange { background: #fef3e2; color: #e68a00; }
+        .stat-box .stat-icon.purple { background: #f1ebff; color: #7b4ce0; }
+
+        [data-theme="dark"] .stat-box .stat-icon.blue { background: rgba(26,107,212,0.2); }
+        [data-theme="dark"] .stat-box .stat-icon.green { background: rgba(15,123,58,0.2); }
+        [data-theme="dark"] .stat-box .stat-icon.orange { background: rgba(230,138,0,0.2); }
+        [data-theme="dark"] .stat-box .stat-icon.purple { background: rgba(123,76,224,0.2); }
+
+        .stat-box .stat-info h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .stat-box .stat-info span {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           USERS PAGE
+           ============================================================ */
+        .users-page {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+        .users-page:hover { box-shadow: var(--shadow-md); }
+
+        /* ============================================================
+           TOOLBAR
+           ============================================================ */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            max-width: 320px;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            padding-left: 42px;
+            padding-right: 12px;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            background: var(--bg-tertiary);
+        }
+        .search-box input:focus {
+            border-color: var(--gold);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 4px rgba(176,138,90,0.1);
+        }
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .toolbar select {
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            padding: 0 12px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            outline: none;
+            transition: all 0.2s;
+            min-width: 130px;
+        }
+        .toolbar select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(176,138,90,0.1);
+            background: var(--bg-card);
+        }
+
+        .toolbar .filter-btn {
+            height: 42px;
+            padding: 0 20px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar .filter-btn:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .toolbar .toolbar-right {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .toolbar .export-btn {
+            height: 42px;
+            padding: 0 12px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background: var(--bg-card);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar .export-btn:hover {
+            border-color: var(--gold);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .toolbar .view-btn {
+            width: 42px;
+            height: 42px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toolbar .view-btn:hover {
+            border-color: var(--gold);
+            color: var(--text-primary);
+        }
+        .toolbar .view-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* ============================================================
+           TABLE
+           ============================================================ */
+        .table-wrapper {
+            overflow-x: auto;
+            padding: 0 4px 4px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        .users-table thead { background: var(--bg-tertiary); }
+
+        .users-table th {
+            padding: 12px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .users-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .users-table tbody tr { transition: all 0.15s; cursor: default; }
+        .users-table tbody tr:hover { background: var(--bg-tertiary); }
+
+        /* ===== USER CELL ===== */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-cell .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .user-cell .user-avatar.blue { background: #1a6bd4; }
+        .user-cell .user-avatar.green { background: #0f7b3a; }
+        .user-cell .user-avatar.orange { background: #e68a00; }
+        .user-cell .user-avatar.purple { background: #7b4ce0; }
+        .user-cell .user-avatar.red { background: #cc3a3a; }
+        .user-cell .user-avatar.teal { background: #0d9488; }
+        .user-cell .user-avatar.pink { background: #db2777; }
+        .user-cell .user-avatar.default { background: var(--text-muted); }
+
+        .user-cell .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+        .user-cell .user-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .user-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .mini-blocked-tag {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-radius: var(--radius-full);
+            background: rgba(220, 38, 38, 0.14);
+            color: #dc2626;
+        }
+
+        tr.row-blocked { opacity: 0.55; }
+
+        .contact-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 13px;
+        }
+        .contact-cell .contact-phone {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== ROLE BADGE ===== */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .role-badge.admin { background: #fef3e2; color: #cc7a00; }
+        .role-badge.client { background: #e6f7ee; color: #0f7b3a; }
+        .role-badge.super { background: #f1ebff; color: #7b4ce0; }
+
+        [data-theme="dark"] .role-badge.admin { background: rgba(230,138,0,0.2); }
+        [data-theme="dark"] .role-badge.client { background: rgba(15,123,58,0.2); }
+        [data-theme="dark"] .role-badge.super { background: rgba(123,76,224,0.2); }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge.active { background: #e6f7ee; color: #0f7b3a; }
+        .status-badge.inactive { background: #fde8e8; color: #cc3a3a; }
+
+        [data-theme="dark"] .status-badge.active { background: rgba(15,123,58,0.2); }
+        [data-theme="dark"] .status-badge.inactive { background: rgba(204,58,58,0.2); }
+
+        /* ===== ACTIONS ===== */
+        .actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .actions button {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .actions button:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .actions button.view:hover { background: #e6f0ff; color: #1a6bd4; }
+        .actions button.edit:hover { background: #e6f7ee; color: #0f7b3a; }
+        .actions button.delete:hover { background: #fde8e8; color: #cc3a3a; }
+        .actions button.chat-btn:hover { background: #e6f0ff; color: #1a6bd4; }
+        .actions button.chat-btn { color: var(--text-muted); }
+
+        /* ============================================================
+           PAGINATION
+           ============================================================ */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pagination .pagination-info {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .pagination .pagination-buttons {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .pagination .pagination-buttons button {
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+        .pagination .pagination-buttons button:hover {
+            border-color: var(--gold);
+            background: var(--bg-tertiary);
+        }
+        .pagination .pagination-buttons button.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        .pagination .pagination-buttons button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ============================================================
+           EMPTY STATE
+           ============================================================ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 56px;
+            color: var(--border-color);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .empty-state h3 {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+        .empty-state p { font-size: 15px; }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-xl);
+            z-index: 99999;
+            display: none;
+            animation: slideUp 0.3s ease;
+            max-width: 420px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .toast.show { display: block; }
+        .toast.success { border-left: 4px solid #16a34a; }
+        .toast.error { border-left: 4px solid #ef4444; }
+        .toast.info { border-left: 4px solid var(--gold); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ============================================================
+           CHAT MODAL - TELEGRAM STYLE
+           ============================================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .modal-header h2 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-full);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+        }
+        .modal-close:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        /* ===== USER DETAIL MODAL ===== */
+        .modal.detail-modal {
+            max-width: 920px;
+        }
+
+        .detail-header-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .detail-header-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-full);
+            background: var(--gold-gradient);
+            color: #1a1a1a;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .detail-header-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        #detailHeaderName { font-size: 16px; margin: 0; }
+        .detail-header-sub { font-size: 12px; color: var(--text-muted); }
+
+        .detail-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 16px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            overflow-x: auto;
+        }
+        .detail-tab {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 14px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all .15s;
+        }
+        .detail-tab:hover { color: var(--text-primary); }
+        .detail-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+        .detail-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .detail-skeleton { display: flex; flex-direction: column; gap: 14px; }
+        .skel-line {
+            height: 14px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border-color) 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: skelShimmer 1.4s infinite;
+        }
+        @keyframes skelShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* Info tab */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .info-field label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .info-field span { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+        .detail-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            color: var(--text-muted);
+            margin: 22px 0 12px;
+        }
+        .detail-section-title:first-child { margin-top: 0; }
+
+        .account-actions { display: flex; gap: 8px; margin-top: 18px; }
+        .account-actions button {
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .account-actions button:hover { background: var(--border-color); }
+        .account-actions button.danger { color: #dc2626; }
+        .account-actions button.success { color: #16a34a; }
+
+        /* Stats tab */
+        .stat-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 14px;
+        }
+        .stat-card-mini {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 14px;
+        }
+        .stat-card-mini .val { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+        .stat-card-mini .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        /* Orders tab */
+        .order-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .order-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+        }
+        .order-card-head .oid { font-weight: 700; font-size: 13px; }
+        .order-card-head .odate { font-size: 12px; color: var(--text-muted); }
+        .order-card-body {
+            padding: 14px;
+            display: none;
+            border-top: 1px solid var(--border-color);
+        }
+        .order-card-body.open { display: block; }
+        .order-product-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .order-product-row:last-child { border-bottom: none; }
+        .order-status-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            text-transform: capitalize;
+        }
+        .order-status-badge.pending { background: rgba(234,179,8,.15); color: #ca8a04; }
+        .order-status-badge.processing,
+        .order-status-badge.packed,
+        .order-status-badge.shipped,
+        .order-status-badge.out_for_delivery { background: rgba(59,130,246,.15); color: #2563eb; }
+        .order-status-badge.delivered { background: rgba(22,163,74,.15); color: #16a34a; }
+        .order-status-badge.cancelled,
+        .order-status-badge.refunded { background: rgba(220,38,38,.15); color: #dc2626; }
+
+        /* Timeline tab */
+        .timeline-list { position: relative; padding-left: 22px; }
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: var(--border-color);
+        }
+        .timeline-item { position: relative; padding-bottom: 18px; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+        .timeline-item .t-desc { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+        .timeline-item .t-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+        /* Security tab */
+        .security-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .security-table th, .security-table td {
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .security-table th { color: var(--text-muted); font-weight: 600; }
+        .login-success { color: #16a34a; }
+        .login-fail { color: #dc2626; }
+
+        .detail-load-more {
+            display: block;
+            margin: 14px auto 0;
+            padding: 8px 20px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .detail-load-more:hover { background: var(--border-color); }
+
+        .detail-empty {
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--text-muted);
+        }
+        .detail-empty i { font-size: 28px; margin-bottom: 8px; display: block; }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            min-height: 320px;
+            max-height: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: var(--bg-primary);
+        }
+
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: var(--radius-full);
+        }
+
+        .chat-loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            margin: auto;
+        }
+        .chat-loading i {
+            font-size: 32px;
+            color: var(--gold);
+            margin-bottom: 12px;
+            display: block;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .chat-loading p { font-size: 14px; }
+
+        .chat-date-separator {
+            text-align: center;
+            margin: 12px 0 8px;
+        }
+        .chat-date-separator span {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: var(--radius-full);
+            display: inline-block;
+        }
+
+        .chat-message {
+            padding: 8px 14px;
+            border-radius: 16px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: messageIn 0.2s ease;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        @keyframes messageIn {
+            from { opacity: 0; transform: translateY(8px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chat-message.sent {
+            align-self: flex-end;
+            background: var(--primary);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.received {
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message .msg-sender {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chat-message.sent .msg-sender {
+            color: rgba(255,255,255,0.8);
+        }
+        .chat-message.received .msg-sender {
+            color: var(--gold);
+        }
+
+        .chat-message .msg-sender::before {
+            content: '👤';
+            font-size: 11px;
+        }
+
+        .chat-message .msg-text { font-size: 14px; line-height: 1.4; }
+
+        .chat-message .msg-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: block;
+            text-align: right;
+        }
+        .chat-message.sent .msg-time { color: rgba(255,255,255,0.5); }
+
+        .chat-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            margin: auto;
+        }
+        .chat-empty i {
+            font-size: 40px;
+            color: var(--border-color);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .chat-empty p { font-size: 14px; }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px 16px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            flex-shrink: 0;
+            pointer-events: auto;
+        }
+
+        .chat-input-wrapper input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            outline: none;
+            font-size: 14px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+            pointer-events: auto;
+        }
+        .chat-input-wrapper input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(176,138,90,0.1);
+        }
+
+        .chat-input-wrapper button {
+            width: 46px;
+            height: 46px;
+            border: none;
+            border-radius: var(--radius-full);
+            background: var(--primary);
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            pointer-events: auto;
+        }
+        .chat-input-wrapper button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        .chat-input-wrapper button:active { transform: scale(0.95); }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1200px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main { margin-left: 0; }
+            .topbar .menu-btn { display: block; }
+            .topbar .admin-btn .admin-info { display: none; }
+            .content { padding: 16px 16px 0; }
+        }
+
+        @media (max-width: 768px) {
+            .topbar { padding: 0 12px; }
+            .topbar .topbar-right { gap: 4px; }
+            .topbar .admin-btn { padding: 4px; }
+            .topbar .admin-btn .avatar { width: 32px; height: 32px; font-size: 12px; }
+            .topbar .icon-btn { width: 36px; height: 36px; font-size: 15px; }
+            .topbar .dropdown-menu { right: -40px; min-width: 200px; }
+
+            .page-header h1 { font-size: 22px; }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .stat-box { padding: 12px; }
+            .stat-box .stat-info h3 { font-size: 20px; }
+
+            .toolbar { padding: 12px; gap: 8px; }
+            .search-box {
+                min-width: 100%;
+                max-width: 100%;
+                order: 10;
+            }
+            .toolbar select {
+                min-width: 100px;
+                flex: 1;
+                font-size: 12px;
+            }
+            .toolbar .toolbar-right { margin-left: 0; }
+
+            .pagination { flex-direction: column; align-items: center; padding: 12px; }
+
+            .users-table th,
+            .users-table td { padding: 8px 8px; font-size: 13px; }
+
+            .user-cell .user-avatar { width: 36px; height: 36px; font-size: 13px; }
+            .user-cell .user-info h4 { font-size: 13px; }
+
+            .modal { max-width: 100%; margin: 10px; border-radius: 16px; }
+            .chat-messages { min-height: 280px; max-height: 380px; padding: 12px 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .content { padding: 8px 8px 0; }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 4px;
+            }
+            .stat-box { padding: 8px; }
+            .stat-box .stat-icon { width: 40px; height: 40px; font-size: 16px; }
+            .stat-box .stat-info h3 { font-size: 18px; }
+            .stat-box .stat-info span { font-size: 11px; }
+
+            .toolbar { padding: 8px; gap: 4px; }
+            .toolbar select {
+                min-width: 70px;
+                font-size: 11px;
+                padding: 0 8px;
+                height: 36px;
+            }
+            .toolbar .filter-btn { height: 36px; padding: 0 12px; font-size: 12px; }
+            .toolbar .export-btn { height: 36px; padding: 0 8px; font-size: 12px; }
+            .toolbar .view-btn { width: 36px; height: 36px; font-size: 13px; }
+
+            .search-box input {
+                height: 36px;
+                font-size: 13px;
+                padding-left: 36px;
+            }
+            .search-box i { left: 8px; font-size: 13px; }
+
+            .users-table th,
+            .users-table td { padding: 4px 6px; font-size: 12px; }
+
+            .user-cell .user-avatar { width: 32px; height: 32px; font-size: 12px; }
+            .user-cell .user-info h4 { font-size: 12px; }
+
+            .role-badge { font-size: 10px; padding: 3px 10px; }
+            .status-badge { font-size: 10px; padding: 3px 10px; }
+
+            .actions button { width: 28px; height: 28px; font-size: 12px; }
+
+            .pagination .pagination-buttons button { width: 32px; height: 32px; font-size: 12px; }
+
+            .page-header h1 { font-size: 18px; }
+            .page-header .breadcrumb { font-size: 12px; }
+
+            .toast {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .chat-messages { min-height: 200px; max-height: 300px; }
+            .chat-message { max-width: 92%; font-size: 13px; padding: 8px 12px; }
+            .chat-input-wrapper { padding: 8px 12px 12px; }
+            .chat-input-wrapper input { font-size: 13px; padding: 8px 14px; }
+            .chat-input-wrapper button { width: 42px; height: 42px; font-size: 16px; }
+        }
+
+        .sidebar.show { transform: translateX(0); }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== CHAT MODAL ===== -->
+    <div class="modal-overlay" id="chatModal">
+        <div class="modal" id="chatModalContent">
+            <div class="modal-header">
+                <h2 id="chatTitle">💬 <span>Chat</span> with <span id="chatUserName">User</span></h2>
+                <button class="modal-close" id="chatCloseBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-empty">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <p>No messages yet. Start chatting!</p>
+                </div>
+            </div>
+
+            <div class="chat-input-wrapper" id="chatInputWrapper">
+                <input type="text" id="chatInput" placeholder="Type a message..." />
+                <button id="chatSendBtn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== USER DETAIL MODAL ===== -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal detail-modal" id="detailModalContent">
+            <div class="modal-header">
+                <div class="detail-header-user">
+                    <div class="detail-header-avatar" id="detailHeaderAvatar">?</div>
+                    <div>
+                        <h2 id="detailHeaderName">User</h2>
+                        <span class="detail-header-sub" id="detailHeaderSub">—</span>
+                    </div>
+                </div>
+                <button class="modal-close" id="detailCloseBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="detail-tabs" id="detailTabs">
+                <button class="detail-tab active" data-tab="info"><i class="fa-regular fa-user"></i> Information</button>
+                <button class="detail-tab" data-tab="stats"><i class="fa-solid fa-chart-simple"></i> Purchase Stats</button>
+                <button class="detail-tab" data-tab="orders"><i class="fa-solid fa-box"></i> Order History</button>
+                <button class="detail-tab" data-tab="timeline"><i class="fa-solid fa-timeline"></i> Activity</button>
+                <button class="detail-tab" data-tab="security"><i class="fa-solid fa-shield-halved"></i> Security</button>
+            </div>
+
+            <div class="detail-body" id="detailBody">
+                <div class="detail-skeleton">
+                    <div class="skel-line" style="width:40%"></div>
+                    <div class="skel-line" style="width:70%"></div>
+                    <div class="skel-line" style="width:55%"></div>
+                    <div class="skel-line" style="width:65%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">U</div>
+            <h2>UZCRAFT</h2>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Main</div>
+            <a href="../html/dashboard.html" class="menu-item">
+                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Commerce</div>
+            <div class="product-section">
+                <div class="menu-item" id="productsBtn">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>Products</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </div>
+                <div class="submenu" id="productsSubmenu">
+                    <a href="../html/all-products.html" class="submenu-item">All Products</a>
+                    <a href="../html/admin-product-stock.html" class="submenu-item">Add Product</a>
+                </div>
+            </div>
+            <a href="../html/orders.html" class="menu-item">
+                <i class="fa-solid fa-box"></i> <span>Orders</span>
+                <span class="badge" style="margin-left:auto;background:var(--gold);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:var(--radius-full);">12</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Management</div>
+            <a href="../html/users.html" class="menu-item active">
+                <i class="fa-solid fa-users"></i> <span>Users</span>
+                <span class="notif-badge" id="sidebarNotifBadge">0</span>
+            </a>
+            <a href="../html/settings.html" class="menu-item">
+                <i class="fa-solid fa-sliders"></i> <span>Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main">
+
+        <!-- ===== TOPBAR ===== -->
+        <header class="topbar">
+            <button id="menuBtn" class="menu-btn" aria-label="Toggle sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="topbar-right">
+                <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fa-regular fa-moon"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="dropdown-btn icon-btn" aria-label="Language">
+                        <i class="fa-solid fa-globe"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="changeLanguage('en')">English</a>
+                        <a href="#" onclick="changeLanguage('ru')">Русский</a>
+                        <a href="#" onclick="changeLanguage('uz')">O'zbek</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropdown-btn icon-btn notification-btn" aria-label="Notifications">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                            <strong style="font-size:13px;color:var(--text-primary);">New Order</strong>
+                            <p style="font-size:12px;color:var(--text-muted);">#ORD-2024 from John Doe</p>
+                        </div>
+                        <div style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                            <strong style="font-size:13px;color:var(--text-primary);">New Customer</strong>
+                            <p style="font-size:12px;color:var(--text-muted);">Jane Smith registered</p>
+                        </div>
+                        <div style="padding:10px 16px;">
+                            <strong style="font-size:13px;color:var(--text-primary);">Product Updated</strong>
+                            <p style="font-size:12px;color:var(--text-muted);">3 products updated</p>
+                        </div>
+                        <div class="divider"></div>
+                        <a href="#"><i class="fa-regular fa-bell"></i> View all notifications</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropdown-btn admin-btn">
+                        <div class="avatar">A</div>
+                        <div class="admin-info">
+                            <h4>Admin</h4>
+                            <p>Super Admin</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#"><i class="fa-regular fa-user"></i> Profile</a>
+                        <a href="../html/settings.html"><i class="fa-regular fa-gear"></i> Settings</a>
+                        <div class="divider"></div>
+                        <a href="#" id="logoutBtn" style="color:#ef4444;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CONTENT ===== -->
+        <div class="content">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1>👥 <span>Users</span></h1>
+                    <p>Manage your customers and administrators</p>
+                </div>
+                <div class="breadcrumb">
+                    <a href="#">Home</a>
+                    <i class="fa-solid fa-chevron-right" style="font-size:10px;color:var(--text-muted);"></i>
+                    <span style="color:var(--text-secondary);font-weight:500;">Users</span>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <span>Total Users</span>
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeUsers">0</h3>
+                        <span>Online Now</span>
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="adminUsers">0</h3>
+                        <span>Admins</span>
+                    </div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="newUsers">0</h3>
+                        <span>New (This Month)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Page -->
+            <div class="users-page">
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search users..." />
+                    </div>
+
+                    <select id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="admin">Admin</option>
+                        <option value="client">Client</option>
+                        <option value="super">Super Admin</option>
+                    </select>
+
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                    </select>
+
+                    <select id="accountStatusFilter">
+                        <option value="">All Accounts</option>
+                        <option value="active">Active</option>
+                        <option value="blocked">Blocked</option>
+                        <option value="pending">Pending</option>
+                    </select>
+
+                    <select id="sortSelect">
+                        <option value="createdAt:desc">Newest First</option>
+                        <option value="createdAt:asc">Oldest First</option>
+                        <option value="totalSpending:desc">Top Spenders</option>
+                        <option value="totalOrders:desc">Most Orders</option>
+                        <option value="username:asc">Name A-Z</option>
+                        <option value="lastSeen:desc">Recently Active</option>
+                    </select>
+
+                    <button class="filter-btn" id="filterBtn">
+                        <i class="fa-solid fa-filter"></i> Filter
+                    </button>
+
+                    <div class="toolbar-right">
+                        <button class="export-btn" id="exportBtn">
+                            <i class="fa-solid fa-download"></i> Export
+                        </button>
+                        <button class="view-btn active" id="gridViewBtn" title="Grid View">
+                            <i class="fa-solid fa-table-cells"></i>
+                        </button>
+                        <button class="view-btn" id="listViewBtn" title="List View">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-wrapper">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40px;"><input type="checkbox" id="selectAll" /></th>
+                                <th>User</th>
+                                <th>Contact</th>
+                                <th>Location</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Orders</th>
+                                <th>Spending</th>
+                                <th>Last Seen</th>
+                                <th style="width:150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="pagination-info" id="paginationInfo">Showing 0 users</div>
+                    <div class="pagination-buttons" id="paginationButtons"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="../js/theme.js"></script>
+    <script>
+        // ============================================================
+        // USERS MANAGEMENT - Admin Panel (Pure Socket.IO Version)
+        // ============================================================
+        // No Polling | Pure Real-time | Zero Memory Leaks
+        // Socket.IO Only | MongoDB ObjectId | Auto Admin Discovery
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // CONFIGURATION
+            // ============================================================
+            const CONFIG = {
+                API_BASE: 'http://localhost:3000/api',
+                SOCKET_URL: 'http://localhost:3000',
+                ITEMS_PER_PAGE: 7,
+                MAX_RETRY_ATTEMPTS: 3,
+                RETRY_DELAY: 1000
+            };
+
+            // ============================================================
+            // STATE MANAGEMENT
+            // ============================================================
+            const State = {
+                users: [],
+                filteredUsers: [],
+                currentPage: 1,
+                itemsPerPage: CONFIG.ITEMS_PER_PAGE,
+                searchTerm: '',
+                roleFilter: '',
+                statusFilter: '',
+                accountStatusFilter: '',
+                sortBy: 'createdAt',
+                sortDir: 'desc',
+                serverPagination: { page: 1, limit: CONFIG.ITEMS_PER_PAGE, total: 0, totalPages: 1 },
+                statsCache: { total: 0, online: 0, admins: 0, newThisMonth: 0 },
+                isLoading: false,
+                isSaving: false,
+                selectedUserIds: new Set(),
+                currentView: 'grid',
+                isInitialized: false,
+                isRefreshing: false,
+                adminId: null,
+                adminName: null,
+                chat: {
+                    userId: null,
+                    userName: null,
+                    messages: [],
+                    isOpen: false,
+                    isSending: false,
+                    isLoading: false,
+                    messageCache: new Set(),
+                    adminId: null
+                }
+            };
+
+            // ============================================================
+            // DOM CACHE
+            // ============================================================
+            const DOM = {
+                usersTable: document.getElementById('usersTable'),
+                searchInput: document.getElementById('searchInput'),
+                roleFilter: document.getElementById('roleFilter'),
+                statusFilter: document.getElementById('statusFilter'),
+                accountStatusFilter: document.getElementById('accountStatusFilter'),
+                sortSelect: document.getElementById('sortSelect'),
+                filterBtn: document.getElementById('filterBtn'),
+                selectAll: document.getElementById('selectAll'),
+                paginationInfo: document.getElementById('paginationInfo'),
+                paginationButtons: document.getElementById('paginationButtons'),
+                exportBtn: document.getElementById('exportBtn'),
+                gridViewBtn: document.getElementById('gridViewBtn'),
+                listViewBtn: document.getElementById('listViewBtn'),
+                totalUsersEl: document.getElementById('totalUsers'),
+                activeUsersEl: document.getElementById('activeUsers'),
+                adminUsersEl: document.getElementById('adminUsers'),
+                newUsersEl: document.getElementById('newUsers'),
+                menuBtn: document.getElementById('menuBtn'),
+                sidebar: document.getElementById('sidebar'),
+                sidebarNotifBadge: document.getElementById('sidebarNotifBadge'),
+                chatModal: document.getElementById('chatModal'),
+                chatModalContent: document.getElementById('chatModalContent'),
+                chatCloseBtn: document.getElementById('chatCloseBtn'),
+                chatInput: document.getElementById('chatInput'),
+                chatSendBtn: document.getElementById('chatSendBtn'),
+                chatMessagesEl: document.getElementById('chatMessages'),
+                chatUserNameEl: document.getElementById('chatUserName'),
+                chatTitleEl: document.getElementById('chatTitle'),
+                chatInputWrapper: document.getElementById('chatInputWrapper'),
+                toast: document.getElementById('toast'),
+                detailModal: document.getElementById('detailModal'),
+                detailCloseBtn: document.getElementById('detailCloseBtn'),
+                detailTabs: document.getElementById('detailTabs'),
+                detailBody: document.getElementById('detailBody'),
+                detailHeaderAvatar: document.getElementById('detailHeaderAvatar'),
+                detailHeaderName: document.getElementById('detailHeaderName'),
+                detailHeaderSub: document.getElementById('detailHeaderSub')
+            };
+
+            // ============================================================
+            // UTILITY FUNCTIONS
+            // ============================================================
+            const Utils = {
+                getCurrentUser() {
+                    try {
+                        const raw = localStorage.getItem('currentUser');
+                        if (!raw) return null;
+                        const user = JSON.parse(raw);
+                        return user && user._id ? user : null;
+                    } catch {
+                        return null;
+                    }
+                },
+
+                getAdminId() {
+                    const user = this.getCurrentUser();
+                    return user?._id || null;
+                },
+
+                getAdminName() {
+                    const user = this.getCurrentUser();
+                    return user?.username || user?.name || 'Admin';
+                },
+
+                escapeHtml(text) {
+                    if (!text) return '';
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                },
+
+                formatDate(dateString) {
+                    try {
+                        const date = new Date(dateString);
+                        return date.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                    } catch {
+                        return 'Invalid date';
+                    }
+                },
+
+                formatTime(dateString) {
+                    try {
+                        const date = new Date(dateString);
+                        return date.toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    } catch {
+                        return 'Invalid time';
+                    }
+                },
+
+                generateId() {
+                    return `${Date.now()}-${Math.random().toString(36).substr(2, 6)}`;
+                },
+
+                debounce(fn, delay = 300) {
+                    let timer = null;
+                    return function(...args) {
+                        clearTimeout(timer);
+                        timer = setTimeout(() => fn.apply(this, args), delay);
+                    };
+                },
+
+                getInitials(name) {
+                    if (!name) return '?';
+                    const parts = name.split(' ');
+                    if (parts.length === 1) return name.substring(0, 2).toUpperCase();
+                    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+                },
+
+                getAvatarColor(name) {
+                    const colors = ['blue', 'green', 'orange', 'purple', 'red', 'teal', 'pink', 'default'];
+                    const index = name ? name.length % colors.length : 0;
+                    return colors[index];
+                },
+
+                getRoleLabel(role) {
+                    const labels = { admin: 'Admin', client: 'Client', super: 'Super Admin' };
+                    return labels[role] || role || 'Client';
+                },
+
+                getRoleClass(role) {
+                    const classes = { admin: 'admin', client: 'client', super: 'super' };
+                    return classes[role] || 'client';
+                },
+
+                getStatusClass(status) {
+                    return status === 'online' ? 'active' : 'inactive';
+                },
+
+                getStatusLabel(status) {
+                    return status === 'online' ? 'Online' : 'Offline';
+                },
+
+                formatMoney(amount) {
+                    const n = Number(amount) || 0;
+                    return n.toLocaleString('en-US') + " so'm";
+                },
+
+                formatRelativeTime(dateString) {
+                    if (!dateString) return '—';
+                    const date = new Date(dateString);
+                    const diffMs = Date.now() - date.getTime();
+                    const diffMin = Math.floor(diffMs / 60000);
+                    if (diffMin < 1) return 'Just now';
+                    if (diffMin < 60) return `${diffMin}m ago`;
+                    const diffHr = Math.floor(diffMin / 60);
+                    if (diffHr < 24) return `${diffHr}h ago`;
+                    const diffDay = Math.floor(diffHr / 24);
+                    if (diffDay < 30) return `${diffDay}d ago`;
+                    return this.formatDate(dateString);
+                },
+
+                getLocation(user) {
+                    const parts = [user.city, user.country].filter(Boolean);
+                    return parts.length ? parts.join(', ') : '—';
+                },
+
+                normalizeUser(user) {
+                    if (!user) return null;
+                    return {
+                        ...user,
+                        _id: user._id || user.id || null,
+                        id: user._id || user.id || null,
+                        status: user.status || 'offline',
+                        role: user.role || 'client',
+                        totalOrders: user.totalOrders || 0,
+                        totalSpending: user.totalSpending || 0,
+                        wishlistCount: user.wishlistCount || 0,
+                        cartCount: user.cartCount || 0,
+                        createdAt: user.createdAt || user.created_at || new Date().toISOString(),
+                        updatedAt: user.updatedAt || user.updated_at || new Date().toISOString()
+                    };
+                },
+
+                normalizeUsers(users) {
+                    if (!Array.isArray(users)) return [];
+                    return users.map(u => this.normalizeUser(u)).filter(Boolean);
+                },
+
+                isCurrentUser(userId) {
+                    const currentUser = this.getCurrentUser();
+                    return String(userId) === String(currentUser?._id);
+                },
+
+                isValidObjectId(id) {
+                    if (!id) return false;
+                    const str = String(id);
+                    return /^[0-9a-fA-F]{24}$/.test(str);
+                }
+            };
+
+            // ============================================================
+            // API CLIENT
+            // ============================================================
+            const API = {
+                async request(endpoint, options = {}) {
+                    const url = endpoint.startsWith('http') ? endpoint : `${CONFIG.API_BASE}${endpoint}`;
+                    const config = {
+                        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+                        ...options
+                    };
+
+                    try {
+                        const response = await fetch(url, config);
+                        const data = await response.json();
+                        if (!response.ok) {
+                            throw new Error(data.message || data.error || `HTTP ${response.status}`);
+                        }
+                        return data;
+                    } catch (error) {
+                        console.error(`API Error [${endpoint}]:`, error);
+                        throw error;
+                    }
+                },
+
+                async getUsers(params = {}) {
+                    const query = new URLSearchParams();
+                    if (params.search) query.set('search', params.search);
+                    if (params.role) query.set('role', params.role);
+                    if (params.status) query.set('status', params.status);
+                    if (params.accountStatus) query.set('accountStatus', params.accountStatus);
+                    if (params.sortBy) query.set('sortBy', params.sortBy);
+                    if (params.sortDir) query.set('sortDir', params.sortDir);
+                    if (params.newSince) query.set('newSince', params.newSince);
+                    query.set('page', params.page || 1);
+                    query.set('limit', params.limit || CONFIG.ITEMS_PER_PAGE);
+
+                    const data = await this.request(`/users?${query.toString()}`);
+
+                    return {
+                        users: Utils.normalizeUsers(data.users || []),
+                        pagination: data.pagination || { page: 1, limit: CONFIG.ITEMS_PER_PAGE, total: 0, totalPages: 1 }
+                    };
+                },
+
+                async getUser(id) {
+                    if (!id) throw new Error('User ID is required');
+                    const data = await this.request(`/users/${id}`);
+                    return Utils.normalizeUser(data.user || data);
+                },
+
+                async getUserDetail(id) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}/detail`);
+                },
+
+                async getUserOrders(id, page = 1) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}/orders?page=${page}&limit=10`);
+                },
+
+                async getUserActivity(id, page = 1) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}/activity?page=${page}&limit=20`);
+                },
+
+                async getUserSecurity(id) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}/security`);
+                },
+
+                async updateUser(id, updates) {
+                    if (!id) throw new Error('User ID is required');
+                    if (!updates || typeof updates !== 'object') throw new Error('Updates are required');
+                    const data = await this.request(`/users/${id}`, {
+                        method: 'PUT',
+                        body: JSON.stringify(updates)
+                    });
+                    return data.user || data;
+                },
+
+                async deleteUser(id) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}`, { method: 'DELETE' });
+                },
+
+                async setAccountStatus(id, accountStatus) {
+                    if (!id) throw new Error('User ID is required');
+                    return await this.request(`/users/${id}/status`, {
+                        method: 'PATCH',
+                        body: JSON.stringify({ accountStatus })
+                    });
+                },
+
+                async sendMessage(senderId, receiverId, message, senderName) {
+                    if (!senderId || !receiverId || !message) {
+                        throw new Error('Sender, receiver and message are required');
+                    }
+                    return await this.request('/chat/send', {
+                        method: 'POST',
+                        body: JSON.stringify({ senderId, receiverId, senderName: senderName || 'Admin', message })
+                    });
+                },
+
+                async getConversation(user1, user2) {
+                    if (!user1 || !user2) throw new Error('Both user IDs are required');
+                    const data = await this.request(`/chat/conversation/${user1}/${user2}`);
+                    return Array.isArray(data) ? data : [];
+                },
+
+                async markAsRead(messageId) {
+                    if (!messageId) throw new Error('Message ID is required');
+                    return await this.request(`/chat/read/${messageId}`, { method: 'PUT' });
+                },
+
+                async getUnreadCount(userId) {
+                    if (!userId) throw new Error('User ID is required');
+                    const data = await this.request(`/chat/unread/${userId}`);
+                    return data.count || 0;
+                }
+            };
+
+            // ============================================================
+            // TOAST NOTIFICATIONS
+            // ============================================================
+            const Toast = {
+                _timeout: null,
+
+                show(message, type = 'info', duration = 3500) {
+                    if (!DOM.toast) return;
+
+                    if (this._timeout) {
+                        clearTimeout(this._timeout);
+                        this._timeout = null;
+                    }
+
+                    DOM.toast.textContent = message;
+                    DOM.toast.className = `toast show ${type}`;
+
+                    this._timeout = setTimeout(() => {
+                        DOM.toast.classList.remove('show');
+                        this._timeout = null;
+                    }, duration);
+                },
+
+                success(message) { this.show(message, 'success'); },
+                error(message) { this.show(message, 'error'); },
+                info(message) { this.show(message, 'info'); },
+                warning(message) { this.show(message, 'warning'); }
+            };
+
+            // ============================================================
+            // SOCKET.IO MANAGER - PURE SOCKET.IO (NO POLLING)
+            // ============================================================
+            const SocketManager = {
+                socket: null,
+                isConnected: false,
+                isInitialized: false,
+                _eventHandlers: {},
+                _reconnectTimer: null,
+
+                connect() {
+                    if (this.isInitialized) return;
+
+                    if (this.socket && this.isConnected) return;
+
+                    try {
+                        this.socket = io(CONFIG.SOCKET_URL, {
+                            reconnection: true,
+                            reconnectionAttempts: CONFIG.MAX_RETRY_ATTEMPTS,
+                            reconnectionDelay: CONFIG.RETRY_DELAY,
+                            timeout: 10000
+                        });
+
+                        this._eventHandlers = {
+                            connect: this._onConnect.bind(this),
+                            connect_error: this._onConnectError.bind(this),
+                            disconnect: this._onDisconnect.bind(this),
+                            'chat-message': this._onChatMessage.bind(this),
+                            'message-read': this._onMessageRead.bind(this),
+                            'typing': this._onTyping.bind(this)
+                        };
+
+                        for (const [event, handler] of Object.entries(this._eventHandlers)) {
+                            this.socket.on(event, handler);
+                        }
+
+                        this.isInitialized = true;
+
+                    } catch (error) {
+                        console.error('Socket connection failed:', error);
+                        this.isConnected = false;
+                        this.isInitialized = false;
+                        this._scheduleReconnect();
+                    }
+                },
+
+                _onConnect() {
+                    this.isConnected = true;
+                    const adminId = Utils.getAdminId();
+                    if (adminId && this.socket) {
+                        this.socket.emit('join', adminId);
+                    }
+                },
+
+                _onConnectError(error) {
+                    this.isConnected = false;
+                    this._scheduleReconnect();
+                },
+
+                _onDisconnect() {
+                    this.isConnected = false;
+                    this._scheduleReconnect();
+                },
+
+                _onChatMessage(data) {
+                    Chat.handleNewMessage(data);
+                },
+
+                _onMessageRead(data) {
+                    Chat.handleMessageRead(data);
+                },
+
+                _onTyping(data) {
+                    // Future: Implement typing indicator
+                },
+
+                _scheduleReconnect() {
+                    if (this._reconnectTimer) {
+                        clearTimeout(this._reconnectTimer);
+                    }
+                    this._reconnectTimer = setTimeout(() => {
+                        if (!this.isConnected) {
+                            this.connect();
+                        }
+                    }, CONFIG.RETRY_DELAY);
+                },
+
+                disconnect() {
+                    if (this._reconnectTimer) {
+                        clearTimeout(this._reconnectTimer);
+                        this._reconnectTimer = null;
+                    }
+
+                    if (this.socket) {
+                        for (const [event, handler] of Object.entries(this._eventHandlers)) {
+                            this.socket.off(event, handler);
+                        }
+                        this._eventHandlers = {};
+                        this.socket.disconnect();
+                        this.socket = null;
+                        this.isConnected = false;
+                        this.isInitialized = false;
+                    }
+                },
+
+                emit(event, data) {
+                    if (!this.socket || !this.isConnected) {
+                        return false;
+                    }
+                    this.socket.emit(event, data);
+                    return true;
+                },
+
+                isReady() {
+                    return this.socket && this.isConnected;
+                }
+            };
+
+            // ============================================================
+            // CHAT SYSTEM - PURE SOCKET.IO
+            // ============================================================
+            const Chat = {
+                open(userId, userName) {
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) {
+                        Toast.error('Please login first');
+                        return;
+                    }
+
+                    if (String(userId) === String(adminId)) {
+                        Toast.error('You cannot chat with yourself');
+                        return;
+                    }
+
+                    if (!Utils.isValidObjectId(userId)) {
+                        Toast.error('Invalid user ID');
+                        return;
+                    }
+
+                    if (State.chat.isOpen) {
+                        this.close();
+                    }
+
+                    State.chat.userId = String(userId);
+                    State.chat.userName = userName;
+                    State.chat.messages = [];
+                    State.chat.isOpen = true;
+                    State.chat.isSending = false;
+                    State.chat.isLoading = false;
+                    State.chat.messageCache.clear();
+                    State.chat.adminId = adminId;
+
+                    if (DOM.chatUserNameEl) DOM.chatUserNameEl.textContent = userName;
+                    if (DOM.chatTitleEl) {
+                        DOM.chatTitleEl.innerHTML =
+                            `💬 <span>Chat</span> with <span style="background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${Utils.escapeHtml(userName)}</span>`;
+                    }
+
+                    if (DOM.chatModal) DOM.chatModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    this._showLoading();
+                    this.loadMessages();
+
+                    setTimeout(() => {
+                        if (DOM.chatInput) {
+                            DOM.chatInput.value = '';
+                            DOM.chatInput.disabled = false;
+                            DOM.chatInput.focus();
+                        }
+                    }, 400);
+                },
+
+                close() {
+                    if (DOM.chatModal) DOM.chatModal.classList.remove('active');
+                    document.body.style.overflow = '';
+
+                    State.chat.isOpen = false;
+                    State.chat.userId = null;
+                    State.chat.userName = null;
+                    State.chat.messages = [];
+                    State.chat.messageCache.clear();
+
+                    if (DOM.chatInput) {
+                        DOM.chatInput.value = '';
+                        DOM.chatInput.disabled = false;
+                    }
+                },
+
+                async loadMessages() {
+                    if (!State.chat.userId || State.chat.isLoading) return;
+
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) return;
+
+                    State.chat.isLoading = true;
+
+                    try {
+                        const messages = await API.getConversation(adminId, State.chat.userId);
+
+                        const newMessages = [];
+                        for (const msg of messages) {
+                            const key = String(msg._id || msg.id);
+                            if (!State.chat.messageCache.has(key)) {
+                                State.chat.messageCache.add(key);
+                                newMessages.push({
+                                    id: msg._id || msg.id,
+                                    senderId: msg.senderId,
+                                    receiverId: msg.receiverId,
+                                    senderName: msg.senderName || 'User',
+                                    message: msg.message,
+                                    timestamp: msg.timestamp || msg.createdAt || new Date().toISOString(),
+                                    read: msg.read || false
+                                });
+                            }
+                        }
+
+                        if (newMessages.length === 0 && State.chat.messages.length === 0) {
+                            this._showEmpty();
+                            State.chat.isLoading = false;
+                            return;
+                        }
+
+                        if (newMessages.length > 0) {
+                            State.chat.messages = [...State.chat.messages, ...newMessages];
+                            State.chat.messages.sort((a, b) =>
+                                new Date(a.timestamp) - new Date(b.timestamp)
+                            );
+
+                            this._renderMessages();
+                            await this.markMessagesAsRead();
+                        }
+
+                    } catch (error) {
+                        console.warn('Load messages error:', error);
+                        if (State.chat.messages.length === 0) {
+                            this._showError();
+                        }
+                    } finally {
+                        State.chat.isLoading = false;
+                    }
+                },
+
+                async markMessagesAsRead() {
+                    if (!State.chat.userId) return;
+
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) return;
+
+                    const unreadMessages = State.chat.messages.filter(msg =>
+                        String(msg.senderId) === String(State.chat.userId) &&
+                        String(msg.receiverId) === String(adminId) &&
+                        !msg.read
+                    );
+
+                    if (unreadMessages.length === 0) return;
+
+                    for (const msg of unreadMessages) {
+                        try {
+                            await API.markAsRead(msg.id);
+                            msg.read = true;
+                        } catch (error) {
+                            console.warn('Mark as read error:', error);
+                        }
+                    }
+
+                    this.updateUnreadCount();
+                },
+
+                async sendMessage() {
+                    if (State.chat.isSending || !State.chat.userId || !DOM.chatInput) return;
+
+                    const message = DOM.chatInput.value.trim();
+                    if (!message) return;
+
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) {
+                        Toast.error('Please login first');
+                        return;
+                    }
+
+                    const currentUser = Utils.getCurrentUser();
+                    const senderName = currentUser?.username || currentUser?.name || 'Admin';
+
+                    const key = `${message}-${Date.now()}`;
+                    if (State.chat.messageCache.has(key)) {
+                        Toast.warning('Duplicate detected');
+                        return;
+                    }
+                    State.chat.messageCache.add(key);
+
+                    State.chat.isSending = true;
+
+                    const tempId = Utils.generateId();
+                    const tempMsg = {
+                        id: tempId,
+                        senderId: adminId,
+                        receiverId: State.chat.userId,
+                        senderName: senderName,
+                        message: message,
+                        timestamp: new Date().toISOString(),
+                        read: false,
+                        _temp: true
+                    };
+
+                    State.chat.messages.push(tempMsg);
+                    this._renderMessages();
+
+                    DOM.chatInput.value = '';
+                    DOM.chatInput.disabled = true;
+                    if (DOM.chatSendBtn) DOM.chatSendBtn.disabled = true;
+
+                    try {
+                        await API.sendMessage(adminId, State.chat.userId, message, senderName);
+
+                        State.chat.messages = State.chat.messages.filter(m => m.id !== tempId);
+                        await this.loadMessages();
+
+                        Toast.success('Message sent!');
+
+                        SocketManager.emit('chat-message', {
+                            senderId: adminId,
+                            receiverId: State.chat.userId,
+                            senderName: senderName,
+                            message: message,
+                            timestamp: new Date().toISOString()
+                        });
+
+                    } catch (error) {
+                        console.warn('Send error:', error);
+                        State.chat.messages = State.chat.messages.map(m =>
+                            m.id === tempId ? { ...m, _temp: false } : m
+                        );
+                        this._renderMessages();
+                        Toast.error('Failed to send message');
+                    } finally {
+                        State.chat.isSending = false;
+                        if (DOM.chatInput) {
+                            DOM.chatInput.disabled = false;
+                            DOM.chatInput.focus();
+                        }
+                        if (DOM.chatSendBtn) DOM.chatSendBtn.disabled = false;
+
+                        setTimeout(() => {
+                            State.chat.messageCache.delete(key);
+                        }, 2000);
+                    }
+                },
+
+                async updateUnreadCount() {
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) return;
+
+                    try {
+                        const count = await API.getUnreadCount(adminId);
+                        this._updateBadge(count);
+                    } catch (error) {
+                        console.warn('Unread count error:', error);
+                    }
+                },
+
+                handleNewMessage(data) {
+                    const adminId = Utils.getAdminId();
+                    if (!adminId) return;
+
+                    // Only process if chat is open and message is for this admin
+                    if (State.chat.isOpen &&
+                        String(data.senderId) === String(State.chat.userId) &&
+                        String(data.receiverId) === String(adminId)) {
+                        const message = {
+                            id: data._id || data.id || Utils.generateId(),
+                            senderId: data.senderId,
+                            receiverId: data.receiverId,
+                            senderName: data.senderName || 'User',
+                            message: data.message,
+                            timestamp: data.timestamp || new Date().toISOString(),
+                            read: false
+                        };
+                        State.chat.messages.push(message);
+                        State.chat.messageCache.add(message.id);
+                        this._renderMessages();
+                        this.markMessagesAsRead();
+                    }
+
+                    if (!State.chat.isOpen) {
+                        this.updateUnreadCount();
+                    }
+                },
+
+                handleMessageRead(data) {
+                    if (State.chat.isOpen &&
+                        String(data.messageId) === String(State.chat.messages[State.chat.messages.length - 1]?.id)) {
+                        const message = State.chat.messages.find(m => m.id === data.messageId);
+                        if (message) {
+                            message.read = true;
+                            this._renderMessages();
+                        }
+                    }
+                },
+
+                _updateBadge(count) {
+                    if (count > 0) {
+                        document.title = `💬 (${count}) UZCRAFT — Users`;
+                        if (DOM.sidebarNotifBadge) {
+                            DOM.sidebarNotifBadge.textContent = count > 99 ? '99+' : count;
+                            DOM.sidebarNotifBadge.classList.add('show');
+                        }
+                    } else {
+                        document.title = 'UZCRAFT — Users';
+                        if (DOM.sidebarNotifBadge) {
+                            DOM.sidebarNotifBadge.classList.remove('show');
+                        }
+                    }
+                },
+
+                _renderMessages() {
+                    if (!DOM.chatMessagesEl) return;
+
+                    if (State.chat.messages.length === 0) {
+                        this._showEmpty();
+                        return;
+                    }
+
+                    const adminId = Utils.getAdminId();
+                    let html = '';
+                    let lastDate = '';
+
+                    for (const msg of State.chat.messages) {
+                        const isSent = String(msg.senderId) === String(adminId);
+                        const time = Utils.formatTime(msg.timestamp);
+                        const date = Utils.formatDate(msg.timestamp);
+
+                        let senderName = isSent ? 'You' : (msg.senderName || 'User');
+                        if (!isSent) {
+                            const user = State.users.find(u => String(u._id) === String(msg.senderId));
+                            if (user) senderName = user.username || user.name || 'User';
+                        }
+
+                        if (date !== lastDate) {
+                            html += `<div class="chat-date-separator"><span>${Utils.escapeHtml(date)}</span></div>`;
+                            lastDate = date;
+                        }
+
+                        const readStatus = isSent ? (msg.read ? ' ✓✓' : ' ✓') : '';
+
+                        html += `
+                            <div class="chat-message ${isSent ? 'sent' : 'received'}">
+                                <div class="msg-sender">${Utils.escapeHtml(senderName)}</div>
+                                <div class="msg-text">${Utils.escapeHtml(msg.message)}</div>
+                                <span class="msg-time">${Utils.escapeHtml(time)}${readStatus}</span>
+                            </div>
+                        `;
+                    }
+
+                    DOM.chatMessagesEl.innerHTML = html;
+                    this._scrollToBottom();
+                },
+
+                _showLoading() {
+                    if (!DOM.chatMessagesEl) return;
+                    DOM.chatMessagesEl.innerHTML = `
+                        <div class="chat-loading">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <p>Loading messages...</p>
+                        </div>
+                    `;
+                },
+
+                _showEmpty() {
+                    if (!DOM.chatMessagesEl) return;
+                    DOM.chatMessagesEl.innerHTML = `
+                        <div class="chat-empty">
+                            <i class="fa-regular fa-comment-dots"></i>
+                            <p>No messages yet. Start chatting!</p>
+                        </div>
+                    `;
+                },
+
+                _showError() {
+                    if (!DOM.chatMessagesEl) return;
+                    DOM.chatMessagesEl.innerHTML = `
+                        <div class="chat-empty">
+                            <i class="fa-regular fa-circle-exclamation"></i>
+                            <p>Failed to load messages. Please try again.</p>
+                            <button onclick="Chat.loadMessages()" 
+                                    style="margin-top:12px;padding:8px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;">
+                                <i class="fa-solid fa-rotate"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                },
+
+                _scrollToBottom() {
+                    if (!DOM.chatMessagesEl) return;
+                    requestAnimationFrame(() => {
+                        DOM.chatMessagesEl.scrollTop = DOM.chatMessagesEl.scrollHeight;
+                    });
+                }
+            };
+
+            // ============================================================
+            // USERS MANAGER
+            // ============================================================
+            const UsersManager = {
+                async loadUsers(silent = false) {
+                    if (State.isLoading || State.isRefreshing) return;
+
+                    State.isRefreshing = true;
+                    State.isLoading = true;
+
+                    if (!silent) {
+                        this.showLoading();
+                    }
+
+                    try {
+                        const { users, pagination } = await API.getUsers({
+                            search: State.searchTerm,
+                            role: State.roleFilter,
+                            status: State.statusFilter,
+                            accountStatus: State.accountStatusFilter,
+                            sortBy: State.sortBy,
+                            sortDir: State.sortDir,
+                            page: State.currentPage,
+                            limit: State.itemsPerPage
+                        });
+
+                        State.users = users;
+                        State.filteredUsers = users;
+                        State.serverPagination = pagination;
+
+                        const admin = Utils.getCurrentUser();
+                        if (admin?._id) {
+                            State.adminId = admin._id;
+                            State.adminName = admin.username || admin.name || 'Admin';
+                        }
+
+                        await this.updateStats();
+                        this.renderUsers();
+
+                        if (!silent) {
+                            Toast.success(`Loaded ${users.length} users`);
+                        }
+
+                    } catch (error) {
+                        console.error('Load users error:', error);
+                        if (!silent) {
+                            Toast.error('Failed to load users');
+                            this.renderError();
+                        }
+                    } finally {
+                        State.isLoading = false;
+                        State.isRefreshing = false;
+                    }
+                },
+
+                applyFilters() {
+                    State.searchTerm = DOM.searchInput?.value?.trim() || '';
+                    State.roleFilter = DOM.roleFilter?.value || '';
+                    State.statusFilter = DOM.statusFilter?.value || '';
+                    State.accountStatusFilter = DOM.accountStatusFilter?.value || '';
+
+                    const sortValue = DOM.sortSelect?.value || 'createdAt:desc';
+                    const [sortBy, sortDir] = sortValue.split(':');
+                    State.sortBy = sortBy;
+                    State.sortDir = sortDir;
+
+                    State.currentPage = 1;
+                    this.loadUsers();
+                },
+
+                renderUsers() {
+                    if (!DOM.usersTable) return;
+
+                    const currentUser = Utils.getCurrentUser();
+                    const currentUserId = String(currentUser?._id || '');
+
+                    const pageItems = State.users.filter(u => String(u._id) !== currentUserId);
+
+                    if (pageItems.length === 0) {
+                        DOM.usersTable.innerHTML = `
+                            <tr>
+                                <td colspan="10">
+                                    <div class="empty-state">
+                                        <i class="fa-regular fa-user"></i>
+                                        <h3>No users found</h3>
+                                        <p>Try adjusting your filters or check back later</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        this.updatePagination();
+                        return;
+                    }
+
+                    let html = '';
+
+                    for (const user of pageItems) {
+
+                        const initials = Utils.getInitials(user.username || user.fullName || 'User');
+                        const color = Utils.getAvatarColor(user.username || user.fullName || 'User');
+                        const roleLabel = Utils.getRoleLabel(user.role);
+                        const roleClass = Utils.getRoleClass(user.role);
+                        const statusClass = Utils.getStatusClass(user.status);
+                        const statusLabel = Utils.getStatusLabel(user.status);
+                        const blocked = user.accountStatus === 'blocked';
+
+                        html += `
+                            <tr data-id="${user._id}" class="${blocked ? 'row-blocked' : ''}">
+                                <td>
+                                    <input type="checkbox" class="user-checkbox" data-id="${user._id}" 
+                                           ${State.selectedUserIds.has(user._id) ? 'checked' : ''} />
+                                </td>
+                                <td>
+                                    <div class="user-cell" style="cursor:pointer;" onclick="UsersManager.viewUser('${user._id}')">
+                                        ${user.avatar
+                                            ? `<img class="user-avatar-img" src="${Utils.escapeHtml(user.avatar)}" alt="" />`
+                                            : `<div class="user-avatar ${color}">${initials}</div>`}
+                                        <div class="user-info">
+                                            <h4>${Utils.escapeHtml(user.fullName || user.username || 'User')}
+                                                ${blocked ? '<span class="mini-blocked-tag">Blocked</span>' : ''}</h4>
+                                            <span>@${Utils.escapeHtml(user.username || 'user')}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="contact-cell">
+                                        <span>${Utils.escapeHtml(user.email || 'No email')}</span>
+                                        <span class="contact-phone">${Utils.escapeHtml(user.phone || '—')}</span>
+                                    </div>
+                                </td>
+                                <td>${Utils.escapeHtml(Utils.getLocation(user))}</td>
+                                <td><span class="role-badge ${roleClass}">${roleLabel}</span></td>
+                                <td><span class="status-badge ${statusClass}">● ${statusLabel}</span></td>
+                                <td>${user.totalOrders || 0}</td>
+                                <td>${Utils.formatMoney(user.totalSpending)}</td>
+                                <td>${Utils.formatRelativeTime(user.lastSeen)}</td>
+                                <td>
+                                    <div class="actions">
+                                        <button class="chat-btn" onclick="Chat.open('${user._id}', '${Utils.escapeHtml(user.username || user.fullName || 'User')}')" title="Chat">
+                                            <i class="fa-regular fa-comment"></i>
+                                        </button>
+                                        <button class="view" onclick="UsersManager.viewUser('${user._id}')" title="View">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                        <button class="edit" onclick="UsersManager.editUser('${user._id}')" title="Edit">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="delete" onclick="UsersManager.deleteUser('${user._id}')" title="Delete">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
+
+                    DOM.usersTable.innerHTML = html;
+                    this.updatePagination();
+                },
+
+                updatePagination() {
+                    if (!DOM.paginationInfo || !DOM.paginationButtons) return;
+
+                    const { page, total, totalPages, limit } = State.serverPagination;
+                    const start = total > 0 ? (page - 1) * limit + 1 : 0;
+                    const end = Math.min(page * limit, total);
+
+                    DOM.paginationInfo.textContent = `Showing ${start} - ${end} of ${total} users`;
+
+                    let buttonsHTML = '';
+                    buttonsHTML += `<button ${page === 1 ? 'disabled' : ''} onclick="UsersManager.goToPage(${page - 1})">‹</button>`;
+
+                    const maxButtons = 5;
+                    let startPage = Math.max(1, page - Math.floor(maxButtons / 2));
+                    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+                    if (endPage - startPage < maxButtons - 1) {
+                        startPage = Math.max(1, endPage - maxButtons + 1);
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        buttonsHTML +=
+                            `<button class="${i === page ? 'active' : ''}" onclick="UsersManager.goToPage(${i})">${i}</button>`;
+                    }
+
+                    buttonsHTML +=
+                        `<button ${page === totalPages || totalPages === 0 ? 'disabled' : ''} onclick="UsersManager.goToPage(${page + 1})">›</button>`;
+
+                    DOM.paginationButtons.innerHTML = buttonsHTML;
+                },
+
+                goToPage(page) {
+                    const totalPages = State.serverPagination.totalPages || 1;
+                    if (page < 1 || page > totalPages || page === State.currentPage) return;
+                    State.currentPage = page;
+                    this.loadUsers(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                async updateStats() {
+                    try {
+                        const now = new Date();
+                        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+                        const [totalRes, onlineRes, adminRes, newRes] = await Promise.all([
+                            API.getUsers({ limit: 1, page: 1 }),
+                            API.getUsers({ limit: 1, page: 1, status: 'online' }),
+                            API.getUsers({ limit: 1, page: 1, role: 'admin' }),
+                            API.getUsers({ limit: 1, page: 1, newSince: monthStart })
+                        ]);
+
+                        State.statsCache = {
+                            total: totalRes.pagination.total,
+                            online: onlineRes.pagination.total,
+                            admins: adminRes.pagination.total,
+                            newThisMonth: newRes.pagination.total
+                        };
+
+                        if (DOM.totalUsersEl) DOM.totalUsersEl.textContent = State.statsCache.total;
+                        if (DOM.activeUsersEl) DOM.activeUsersEl.textContent = State.statsCache.online;
+                        if (DOM.adminUsersEl) DOM.adminUsersEl.textContent = State.statsCache.admins;
+                        if (DOM.newUsersEl) DOM.newUsersEl.textContent = State.statsCache.newThisMonth;
+
+                    } catch (error) {
+                        console.warn('Stats load error:', error);
+                    }
+                },
+
+                showLoading() {
+                    if (!DOM.usersTable) return;
+                    DOM.usersTable.innerHTML = `
+                        <tr>
+                            <td colspan="10">
+                                <div style="text-align:center;padding:40px 20px;">
+                                    <i class="fa-solid fa-spinner fa-spin" style="font-size:32px;color:var(--gold);"></i>
+                                    <p style="margin-top:12px;color:var(--text-muted);">Loading users...</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                },
+
+                renderError() {
+                    if (!DOM.usersTable) return;
+                    DOM.usersTable.innerHTML = `
+                        <tr>
+                            <td colspan="10">
+                                <div class="empty-state">
+                                    <i class="fa-regular fa-circle-exclamation"></i>
+                                    <h3>Failed to load users</h3>
+                                    <p>Please check your connection and try again</p>
+                                    <button onclick="UsersManager.loadUsers()" 
+                                            style="margin-top:12px;padding:8px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;">
+                                        <i class="fa-solid fa-rotate"></i> Retry
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                },
+
+                async deleteUser(id) {
+                    const user = State.users.find(u => String(u._id) === String(id));
+                    if (!user) {
+                        Toast.error('User not found');
+                        return;
+                    }
+
+                    if (!confirm(`Are you sure you want to delete user "${user.username || user.name || 'User'}"?`)) {
+                        return;
+                    }
+
+                    try {
+                        await API.deleteUser(id);
+                        Toast.success(`User "${user.username || user.name}" deleted successfully`);
+                        await this.loadUsers();
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        Toast.error('Failed to delete user');
+                    }
+                },
+
+                async editUser(id) {
+                    const user = State.users.find(u => String(u._id) === String(id));
+                    if (!user) {
+                        Toast.error('User not found');
+                        return;
+                    }
+
+                    const newRole = prompt(
+                        `Edit role for ${user.username || user.name || 'User'}:\nCurrent: ${user.role || 'client'}\n\nEnter (admin, client, super):`,
+                        user.role || 'client'
+                    );
+                    if (newRole === null) return;
+                    if (!['admin', 'client', 'super'].includes(newRole)) {
+                        Toast.error('Invalid role. Use: admin, client, or super');
+                        return;
+                    }
+
+                    const newAccountStatus = prompt(
+                        `Edit account status for ${user.username || user.name || 'User'}:\nCurrent: ${user.accountStatus || 'active'}\n\nEnter (active, blocked, pending):`,
+                        user.accountStatus || 'active'
+                    );
+                    if (newAccountStatus === null) return;
+                    if (!['active', 'blocked', 'pending'].includes(newAccountStatus)) {
+                        Toast.error('Invalid status. Use: active, blocked or pending');
+                        return;
+                    }
+
+                    try {
+                        await API.updateUser(id, { role: newRole });
+                        await API.setAccountStatus(id, newAccountStatus);
+                        Toast.success(`User "${user.username || user.name}" updated successfully`);
+                        await this.loadUsers();
+                    } catch (error) {
+                        console.error('Update error:', error);
+                        Toast.error('Failed to update user');
+                    }
+                },
+
+                viewUser(id) {
+                    DetailPanel.open(id);
+                },
+
+                async exportUsers() {
+                    let allUsers = [];
+
+                    try {
+                        const { users } = await API.getUsers({
+                            search: State.searchTerm,
+                            role: State.roleFilter,
+                            status: State.statusFilter,
+                            accountStatus: State.accountStatusFilter,
+                            sortBy: State.sortBy,
+                            sortDir: State.sortDir,
+                            page: 1,
+                            limit: 5000
+                        });
+                        allUsers = users;
+                    } catch (error) {
+                        console.error('Export fetch error:', error);
+                        Toast.error('Failed to fetch users for export');
+                        return;
+                    }
+
+                    if (allUsers.length === 0) {
+                        Toast.error('No users to export');
+                        return;
+                    }
+
+                    let csv = 'ID,Username,Email,Phone,Location,Role,Status,Total Orders,Total Spending,Joined\n';
+                    for (const user of allUsers) {
+                        csv +=
+                            `${user._id},${user.username || user.name || ''},${user.email || ''},${user.phone || ''},"${Utils.getLocation(user)}",${user.role || 'client'},${user.status || 'offline'},${user.totalOrders || 0},${user.totalSpending || 0},${Utils.formatDate(user.createdAt)}\n`;
+                    }
+
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `users_export_${new Date().toISOString().slice(0, 10)}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    Toast.success(`Exported ${allUsers.length} users`);
+                },
+
+                toggleSelectAll() {
+                    const isChecked = DOM.selectAll?.checked || false;
+                    const checkboxes = document.querySelectorAll('.user-checkbox');
+
+                    State.selectedUserIds.clear();
+                    checkboxes.forEach(cb => {
+                        cb.checked = isChecked;
+                        if (isChecked) {
+                            State.selectedUserIds.add(cb.dataset.id);
+                        }
+                    });
+                },
+
+                toggleUserSelection(id) {
+                    if (State.selectedUserIds.has(id)) {
+                        State.selectedUserIds.delete(id);
+                    } else {
+                        State.selectedUserIds.add(id);
+                    }
+
+                    const checkboxes = document.querySelectorAll('.user-checkbox');
+                    const checkedCount = document.querySelectorAll('.user-checkbox:checked').length;
+                    if (DOM.selectAll) {
+                        DOM.selectAll.checked = checkboxes.length > 0 && checkedCount === checkboxes.length;
+                    }
+                },
+
+                clearFilters() {
+                    if (DOM.searchInput) DOM.searchInput.value = '';
+                    if (DOM.roleFilter) DOM.roleFilter.value = '';
+                    if (DOM.statusFilter) DOM.statusFilter.value = '';
+                    if (DOM.accountStatusFilter) DOM.accountStatusFilter.value = '';
+                    if (DOM.sortSelect) DOM.sortSelect.value = 'createdAt:desc';
+                    this.applyFilters();
+                },
+
+                destroy() {
+                    if (State.chat.pollTimer) {
+                        clearInterval(State.chat.pollTimer);
+                        State.chat.pollTimer = null;
+                    }
+                    if (Toast._timeout) {
+                        clearTimeout(Toast._timeout);
+                        Toast._timeout = null;
+                    }
+                    State.isInitialized = false;
+                }
+            };
+
+            // ============================================================
+            // USER DETAIL PANEL
+            // ============================================================
+            const DetailPanel = {
+                userId: null,
+                activeTab: 'info',
+                cache: {},
+                ordersPage: 1,
+                timelinePage: 1,
+
+                async open(id) {
+                    const user = State.users.find(u => String(u._id) === String(id));
+                    if (!user) {
+                        Toast.error('User not found');
+                        return;
+                    }
+
+                    this.userId = id;
+                    this.activeTab = 'info';
+                    this.cache = {};
+                    this.ordersPage = 1;
+                    this.timelinePage = 1;
+
+                    if (DOM.detailTabs) {
+                        DOM.detailTabs.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+                        DOM.detailTabs.querySelector('[data-tab="info"]')?.classList.add('active');
+                    }
+
+                    const initials = Utils.getInitials(user.username || user.fullName || 'User');
+                    if (DOM.detailHeaderAvatar) {
+                        DOM.detailHeaderAvatar.innerHTML = user.avatar
+                            ? `<img src="${Utils.escapeHtml(user.avatar)}" alt="" />`
+                            : initials;
+                    }
+                    if (DOM.detailHeaderName) DOM.detailHeaderName.textContent = user.fullName || user.username || 'User';
+                    if (DOM.detailHeaderSub) DOM.detailHeaderSub.textContent = user.email || '';
+
+                    DOM.detailModal?.classList.add('active');
+                    this.renderSkeleton();
+
+                    try {
+                        const data = await API.getUserDetail(id);
+                        this.cache.detail = data;
+                        this.renderInfoTab();
+                    } catch (error) {
+                        console.error('Detail load error:', error);
+                        this.renderErrorState('Failed to load user details');
+                    }
+                },
+
+                close() {
+                    DOM.detailModal?.classList.remove('active');
+                    this.userId = null;
+                },
+
+                renderSkeleton() {
+                    if (!DOM.detailBody) return;
+                    DOM.detailBody.innerHTML = `
+                        <div class="detail-skeleton">
+                            <div class="skel-line" style="width:40%"></div>
+                            <div class="skel-line" style="width:70%"></div>
+                            <div class="skel-line" style="width:55%"></div>
+                            <div class="skel-line" style="width:65%"></div>
+                        </div>
+                    `;
+                },
+
+                renderErrorState(message) {
+                    if (!DOM.detailBody) return;
+                    DOM.detailBody.innerHTML = `
+                        <div class="detail-empty">
+                            <i class="fa-regular fa-circle-exclamation"></i>
+                            <p>${Utils.escapeHtml(message)}</p>
+                        </div>
+                    `;
+                },
+
+                async switchTab(tab) {
+                    if (!this.userId) return;
+                    this.activeTab = tab;
+
+                    DOM.detailTabs?.querySelectorAll('.detail-tab').forEach(t => {
+                        t.classList.toggle('active', t.dataset.tab === tab);
+                    });
+
+                    this.renderSkeleton();
+
+                    try {
+                        if (tab === 'info') this.renderInfoTab();
+                        else if (tab === 'stats') this.renderStatsTab();
+                        else if (tab === 'orders') await this.renderOrdersTab();
+                        else if (tab === 'timeline') await this.renderTimelineTab();
+                        else if (tab === 'security') await this.renderSecurityTab();
+                    } catch (error) {
+                        console.error('Tab load error:', error);
+                        this.renderErrorState('Failed to load this section');
+                    }
+                },
+
+                // ---------- INFO TAB ----------
+                renderInfoTab() {
+                    const u = this.cache.detail?.user;
+                    if (!u || !DOM.detailBody) return;
+
+                    const fullAddress = [u.address, u.city, u.region, u.country].filter(Boolean).join(', ') || '—';
+                    const accountBadgeClass = u.accountStatus === 'blocked' ? 'inactive' : 'active';
+
+                    DOM.detailBody.innerHTML = `
+                        <div class="detail-section-title">User Information</div>
+                        <div class="info-grid">
+                            <div class="info-field"><label>Full Name</label><span>${Utils.escapeHtml(u.fullName || u.username || '—')}</span></div>
+                            <div class="info-field"><label>Username</label><span>@${Utils.escapeHtml(u.username || '—')}</span></div>
+                            <div class="info-field"><label>Email</label><span>${Utils.escapeHtml(u.email || '—')}</span></div>
+                            <div class="info-field"><label>Phone</label><span>${Utils.escapeHtml(u.phone || '—')}</span></div>
+                            <div class="info-field"><label>Role</label><span class="role-badge ${Utils.getRoleClass(u.role)}">${Utils.getRoleLabel(u.role)}</span></div>
+                            <div class="info-field"><label>Status</label><span class="status-badge ${Utils.getStatusClass(u.status)}">● ${Utils.getStatusLabel(u.status)}</span></div>
+                            <div class="info-field"><label>Account Status</label><span class="status-badge ${accountBadgeClass}">${Utils.escapeHtml(u.accountStatus || 'active')}</span></div>
+                            <div class="info-field"><label>Registered</label><span>${Utils.formatDate(u.createdAt)}</span></div>
+                            <div class="info-field"><label>Last Seen</label><span>${Utils.formatRelativeTime(u.lastSeen)}</span></div>
+                        </div>
+
+                        <div class="detail-section-title">Address</div>
+                        <div class="info-grid">
+                            <div class="info-field" style="grid-column:1/-1;"><label>Full Address</label><span>${Utils.escapeHtml(fullAddress)}</span></div>
+                            <div class="info-field"><label>Country</label><span>${Utils.escapeHtml(u.country || '—')}</span></div>
+                            <div class="info-field"><label>Region</label><span>${Utils.escapeHtml(u.region || '—')}</span></div>
+                            <div class="info-field"><label>City</label><span>${Utils.escapeHtml(u.city || '—')}</span></div>
+                        </div>
+
+                        <div class="account-actions">
+                            ${u.accountStatus === 'blocked'
+                                ? `<button class="success" onclick="DetailPanel.setAccountStatus('active')"><i class="fa-solid fa-unlock"></i> Unblock User</button>`
+                                : `<button class="danger" onclick="DetailPanel.setAccountStatus('blocked')"><i class="fa-solid fa-ban"></i> Block User</button>`}
+                            <button onclick="UsersManager.editUser('${u._id}')"><i class="fa-regular fa-pen-to-square"></i> Edit Role</button>
+                            <button onclick="Chat.open('${u._id}', '${Utils.escapeHtml(u.username || u.fullName || 'User')}')"><i class="fa-regular fa-comment"></i> Open Chat</button>
+                        </div>
+                    `;
+                },
+
+                async setAccountStatus(status) {
+                    if (!this.userId) return;
+                    try {
+                        await API.setAccountStatus(this.userId, status);
+                        Toast.success(`Account ${status === 'blocked' ? 'blocked' : 'unblocked'}`);
+                        this.cache.detail.user.accountStatus = status;
+                        this.renderInfoTab();
+                        UsersManager.loadUsers(true);
+                    } catch (error) {
+                        console.error('Status update error:', error);
+                        Toast.error('Failed to update account status');
+                    }
+                },
+
+                // ---------- STATS TAB ----------
+                renderStatsTab() {
+                    const s = this.cache.detail?.stats;
+                    if (!s || !DOM.detailBody) return;
+
+                    const cards = [
+                        ['Total Orders', s.totalOrders],
+                        ['Completed', s.completedOrders],
+                        ['Pending', s.pendingOrders],
+                        ['Cancelled', s.cancelledOrders],
+                        ['Returned', s.returnedOrders],
+                        ['Total Spent', Utils.formatMoney(s.totalMoneySpent)],
+                        ['Avg Order Price', Utils.formatMoney(s.averageOrderPrice)],
+                        ['Most Purchased Category', s.mostPurchasedCategory || '—'],
+                        ['Last Purchase', s.lastPurchase ? Utils.formatDate(s.lastPurchase) : '—'],
+                        ['Favorite Products', s.favoriteProductsCount],
+                        ['Wishlist Items', s.wishlistCount],
+                        ['Cart Items', s.cartCount]
+                    ];
+
+                    DOM.detailBody.innerHTML = `
+                        <div class="detail-section-title">Purchase Statistics</div>
+                        <div class="stat-cards-grid">
+                            ${cards.map(([lbl, val]) => `
+                                <div class="stat-card-mini">
+                                    <div class="val">${val}</div>
+                                    <div class="lbl">${lbl}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                },
+
+                // ---------- ORDERS TAB ----------
+                async renderOrdersTab() {
+                    const data = await API.getUserOrders(this.userId, this.ordersPage);
+                    const orders = data.orders || [];
+                    this.cache.ordersPagination = data.pagination;
+
+                    if (orders.length === 0 && this.ordersPage === 1) {
+                        DOM.detailBody.innerHTML = `
+                            <div class="detail-empty">
+                                <i class="fa-solid fa-box-open"></i>
+                                <p>No orders yet</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const cardsHtml = orders.map(o => {
+                        const orderNo = '#' + String(o._id).slice(-6).toUpperCase();
+                        const productsHtml = (o.products || []).map(p => `
+                            <div class="order-product-row">
+                                <span>${Utils.escapeHtml(p.product?.name || 'Product')} × ${p.quantity}</span>
+                                <span>${Utils.formatMoney(p.price * p.quantity)}</span>
+                            </div>
+                        `).join('') || '<div class="order-product-row"><span>No product info</span></div>';
+
+                        return `
+                            <div class="order-card">
+                                <div class="order-card-head" onclick="DetailPanel.toggleOrder('${o._id}')">
+                                    <div>
+                                        <div class="oid">${orderNo}</div>
+                                        <div class="odate">${Utils.formatDate(o.createdAt)}</div>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="order-status-badge ${o.status}">${o.status.replace(/_/g, ' ')}</span>
+                                        <strong>${Utils.formatMoney(o.totalPrice)}</strong>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                                <div class="order-card-body" id="orderBody-${o._id}">
+                                    ${productsHtml}
+                                    <div class="order-product-row"><span>Payment Method</span><span>${Utils.escapeHtml(o.paymentMethod || 'Cash')}</span></div>
+                                    <div class="order-product-row"><span>Shipping Address</span><span>${Utils.escapeHtml(o.shippingAddress || '—')}</span></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    const loadMoreHtml = data.pagination && data.pagination.page < data.pagination.totalPages
+                        ? `<button class="detail-load-more" onclick="DetailPanel.loadMoreOrders()">Load More</button>`
+                        : '';
+
+                    if (this.ordersPage === 1) {
+                        DOM.detailBody.innerHTML = `<div class="detail-section-title">Order History</div><div id="ordersList">${cardsHtml}</div>${loadMoreHtml}`;
+                    } else {
+                        const list = document.getElementById('ordersList');
+                        if (list) list.insertAdjacentHTML('beforeend', cardsHtml);
+                        const existingBtn = DOM.detailBody.querySelector('.detail-load-more');
+                        if (existingBtn) existingBtn.outerHTML = loadMoreHtml;
+                    }
+                },
+
+                async loadMoreOrders() {
+                    this.ordersPage += 1;
+                    await this.renderOrdersTab();
+                },
+
+                toggleOrder(id) {
+                    document.getElementById(`orderBody-${id}`)?.classList.toggle('open');
+                },
+
+                // ---------- TIMELINE TAB ----------
+                async renderTimelineTab() {
+                    const data = await API.getUserActivity(this.userId, this.timelinePage);
+                    const activities = data.activities || [];
+
+                    if (activities.length === 0 && this.timelinePage === 1) {
+                        DOM.detailBody.innerHTML = `
+                            <div class="detail-empty">
+                                <i class="fa-solid fa-timeline"></i>
+                                <p>No activity recorded yet</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const itemsHtml = activities.map(a => `
+                        <div class="timeline-item">
+                            <div class="t-desc">${Utils.escapeHtml(a.description)}</div>
+                            <div class="t-time">${Utils.formatRelativeTime(a.createdAt)} · ${Utils.formatDate(a.createdAt)}</div>
+                        </div>
+                    `).join('');
+
+                    const loadMoreHtml = data.pagination && data.pagination.page < data.pagination.totalPages
+                        ? `<button class="detail-load-more" onclick="DetailPanel.loadMoreTimeline()">Load More</button>`
+                        : '';
+
+                    if (this.timelinePage === 1) {
+                        DOM.detailBody.innerHTML = `<div class="detail-section-title">Activity Timeline</div><div class="timeline-list" id="timelineList">${itemsHtml}</div>${loadMoreHtml}`;
+                    } else {
+                        const list = document.getElementById('timelineList');
+                        if (list) list.insertAdjacentHTML('beforeend', itemsHtml);
+                        const existingBtn = DOM.detailBody.querySelector('.detail-load-more');
+                        if (existingBtn) existingBtn.outerHTML = loadMoreHtml;
+                    }
+                },
+
+                async loadMoreTimeline() {
+                    this.timelinePage += 1;
+                    await this.renderTimelineTab();
+                },
+
+                // ---------- SECURITY TAB ----------
+                async renderSecurityTab() {
+                    const data = await API.getUserSecurity(this.userId);
+                    const history = data.loginHistory || [];
+
+                    const rowsHtml = history.map(h => `
+                        <tr>
+                            <td>${Utils.formatDate(h.createdAt)} ${Utils.formatTime(h.createdAt)}</td>
+                            <td class="${h.success ? 'login-success' : 'login-fail'}">${h.success ? 'Success' : 'Failed'}</td>
+                            <td>${Utils.escapeHtml(h.browser || '—')}</td>
+                            <td>${Utils.escapeHtml(h.os || '—')}</td>
+                            <td>${Utils.escapeHtml(h.ip || '—')}</td>
+                        </tr>
+                    `).join('') || `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:16px;">No login history yet</td></tr>`;
+
+                    DOM.detailBody.innerHTML = `
+                        <div class="detail-section-title">Security Overview</div>
+                        <div class="stat-cards-grid">
+                            <div class="stat-card-mini">
+                                <div class="val">${data.accountStatus === 'blocked' ? '🔒 Blocked' : '✅ Active'}</div>
+                                <div class="lbl">Account Status</div>
+                            </div>
+                            <div class="stat-card-mini">
+                                <div class="val">${data.failedLoginAttempts || 0}</div>
+                                <div class="lbl">Failed Login Attempts</div>
+                            </div>
+                            <div class="stat-card-mini">
+                                <div class="val">${data.lastFailedLoginAt ? Utils.formatRelativeTime(data.lastFailedLoginAt) : '—'}</div>
+                                <div class="lbl">Last Failed Login</div>
+                            </div>
+                            <div class="stat-card-mini">
+                                <div class="val">${data.passwordChangedAt ? Utils.formatDate(data.passwordChangedAt) : 'Never'}</div>
+                                <div class="lbl">Password Changed</div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section-title">Login History</div>
+                        <table class="security-table">
+                            <thead>
+                                <tr><th>Date</th><th>Result</th><th>Browser</th><th>OS</th><th>IP</th></tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                    `;
+                }
+            };
+
+            // ============================================================
+            // NOTIFICATION SYSTEM - PURE SOCKET.IO
+            // ============================================================
+            const NotificationManager = {
+                timer: null,
+                isChecking: false,
+                isInitialized: false,
+                _lastUnreadCount: 0,
+
+                start() {
+                    if (this.isInitialized) return;
+
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                        this.timer = null;
+                    }
+
+                    // Check once immediately
+                    this.check();
+
+                    this.isInitialized = true;
+                },
+
+                stop() {
+                    if (this.timer) {
+                        clearInterval(this.timer);
+                        this.timer = null;
+                    }
+                    this.isInitialized = false;
+                },
+
+                async check() {
+                    if (this.isChecking) return;
+                    this.isChecking = true;
+
+                    try {
+                        const adminId = Utils.getAdminId();
+                        if (!adminId) {
+                            this.isChecking = false;
+                            return;
+                        }
+
+                        const count = await API.getUnreadCount(adminId);
+
+                        if (count > this._lastUnreadCount && count > 0 && !State.chat.isOpen) {
+                            Toast.info(`💬 You have ${count} new message${count > 1 ? 's' : ''}`);
+                        }
+
+                        this._lastUnreadCount = count;
+                        Chat._updateBadge(count);
+
+                    } catch (error) {
+                        console.warn('Notification check error:', error);
+                    } finally {
+                        this.isChecking = false;
+                    }
+                }
+            };
+
+            // ============================================================
+            // EVENT HANDLERS
+            // ============================================================
+            function setupEventListeners() {
+                if (DOM.searchInput) {
+                    DOM.searchInput.addEventListener('input', Utils.debounce(() => {
+                        UsersManager.applyFilters();
+                    }, 300));
+                }
+
+                if (DOM.roleFilter) {
+                    DOM.roleFilter.addEventListener('change', () => UsersManager.applyFilters());
+                }
+                if (DOM.statusFilter) {
+                    DOM.statusFilter.addEventListener('change', () => UsersManager.applyFilters());
+                }
+                if (DOM.accountStatusFilter) {
+                    DOM.accountStatusFilter.addEventListener('change', () => UsersManager.applyFilters());
+                }
+                if (DOM.sortSelect) {
+                    DOM.sortSelect.addEventListener('change', () => UsersManager.applyFilters());
+                }
+
+                if (DOM.filterBtn) {
+                    DOM.filterBtn.addEventListener('click', () => UsersManager.applyFilters());
+                }
+
+                if (DOM.detailCloseBtn) {
+                    DOM.detailCloseBtn.addEventListener('click', () => DetailPanel.close());
+                }
+                if (DOM.detailModal) {
+                    DOM.detailModal.addEventListener('click', (e) => {
+                        if (e.target === DOM.detailModal) DetailPanel.close();
+                    });
+                }
+                if (DOM.detailTabs) {
+                    DOM.detailTabs.addEventListener('click', (e) => {
+                        const btn = e.target.closest('.detail-tab');
+                        if (btn) DetailPanel.switchTab(btn.dataset.tab);
+                    });
+                }
+
+                if (DOM.selectAll) {
+                    DOM.selectAll.addEventListener('change', () => UsersManager.toggleSelectAll());
+                }
+
+                if (DOM.usersTable) {
+                    DOM.usersTable.addEventListener('change', (e) => {
+                        if (e.target.classList.contains('user-checkbox')) {
+                            UsersManager.toggleUserSelection(e.target.dataset.id);
+                        }
+                    });
+                }
+
+                if (DOM.exportBtn) {
+                    DOM.exportBtn.addEventListener('click', () => UsersManager.exportUsers());
+                }
+
+                if (DOM.gridViewBtn) {
+                    DOM.gridViewBtn.addEventListener('click', () => {
+                        State.currentView = 'grid';
+                        DOM.gridViewBtn.classList.add('active');
+                        DOM.listViewBtn?.classList.remove('active');
+                    });
+                }
+                if (DOM.listViewBtn) {
+                    DOM.listViewBtn.addEventListener('click', () => {
+                        State.currentView = 'list';
+                        DOM.listViewBtn.classList.add('active');
+                        DOM.gridViewBtn?.classList.remove('active');
+                    });
+                }
+
+                if (DOM.menuBtn && DOM.sidebar) {
+                    DOM.menuBtn.addEventListener('click', () => {
+                        DOM.sidebar.classList.toggle('show');
+                    });
+
+                    document.addEventListener('click', (e) => {
+                        if (window.innerWidth <= 992) {
+                            if (!DOM.sidebar.contains(e.target) && !DOM.menuBtn.contains(e.target)) {
+                                DOM.sidebar.classList.remove('show');
+                            }
+                        }
+                    });
+                }
+
+                setupChatEventListeners();
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                        e.preventDefault();
+                        DOM.searchInput?.focus();
+                    }
+                    if (e.key === 'Escape') {
+                        if (DOM.searchInput && document.activeElement === DOM.searchInput) {
+                            DOM.searchInput.value = '';
+                            UsersManager.applyFilters();
+                            DOM.searchInput.blur();
+                        }
+                        if (State.chat.isOpen) {
+                            Chat.close();
+                        }
+                        if (DetailPanel.userId) {
+                            DetailPanel.close();
+                        }
+                    }
+                });
+
+                const logoutBtn = document.getElementById('logoutBtn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.removeItem('currentUser');
+                        Toast.success('Logged out successfully');
+                        setTimeout(() => {
+                            window.location.href = '/login/html/index.html';
+                        }, 500);
+                    });
+                }
+
+                const productsBtn = document.getElementById('productsBtn');
+                const productsSubmenu = document.getElementById('productsSubmenu');
+                const arrow = document.querySelector('.arrow');
+                if (productsBtn && productsSubmenu) {
+                    productsBtn.addEventListener('click', () => {
+                        productsSubmenu.classList.toggle('show');
+                        if (arrow) arrow.classList.toggle('rotate');
+                    });
+                }
+            }
+
+            // ============================================================
+            // CHAT EVENT LISTENERS
+            // ============================================================
+            function setupChatEventListeners() {
+                if (DOM.chatCloseBtn) {
+                    DOM.chatCloseBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        Chat.close();
+                    });
+                }
+
+                if (DOM.chatSendBtn) {
+                    DOM.chatSendBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        Chat.sendMessage();
+                    });
+                }
+
+                if (DOM.chatInput) {
+                    DOM.chatInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            Chat.sendMessage();
+                        }
+                    });
+
+                    DOM.chatInput.addEventListener('click', (e) => e.stopPropagation());
+                    DOM.chatInput.addEventListener('focus', (e) => e.stopPropagation());
+                }
+
+                if (DOM.chatModal) {
+                    DOM.chatModal.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+
+                if (DOM.chatModalContent) {
+                    DOM.chatModalContent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+
+                if (DOM.chatInputWrapper) {
+                    DOM.chatInputWrapper.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && State.chat.isOpen) {
+                        if (document.activeElement !== DOM.chatInput) {
+                            Chat.close();
+                        }
+                    }
+                });
+            }
+
+            // ============================================================
+// ADMIN PANEL - USER PRESENCE & STATUS UPDATES
+// ============================================================
+
+// Add these functions to the existing UsersManager
+const UsersManagerEnhanced = {
+    // Track online users
+    _onlineUsers: new Set(),
+    _typingUsers: new Set(),
+    
+    // Update user presence in the table
+    updateUserPresence(userId, status) {
+        const row = document.querySelector(`tr[data-id="${userId}"]`);
+        if (!row) return;
+        
+        const statusBadge = row.querySelector('.status-badge');
+        if (!statusBadge) return;
+        
+        if (status === 'online') {
+            statusBadge.innerHTML = '● Online';
+            statusBadge.className = 'status-badge online';
+        } else if (status === 'typing') {
+            statusBadge.innerHTML = '● Typing...';
+            statusBadge.className = 'status-badge typing';
+        } else {
+            statusBadge.innerHTML = '● Offline';
+            statusBadge.className = 'status-badge offline';
+        }
+    },
+    
+    // Update last seen
+    updateLastSeen(userId, lastSeen) {
+        const row = document.querySelector(`tr[data-id="${userId}"]`);
+        if (!row) return;
+        
+        const lastSeenCell = row.querySelector('.last-seen');
+        if (lastSeenCell) {
+            lastSeenCell.textContent = Utils.getTimeAgo(lastSeen);
+        }
+    },
+    
+    // Update unread count in table
+    updateUnreadCount(userId, count) {
+        const row = document.querySelector(`tr[data-id="${userId}"]`);
+        if (!row) return;
+        
+        const unreadBadge = row.querySelector('.unread-badge');
+        if (unreadBadge) {
+            if (count > 0) {
+                unreadBadge.textContent = count > 99 ? '99+' : count;
+                unreadBadge.style.display = 'inline-block';
+            } else {
+                unreadBadge.style.display = 'none';
+            }
+        }
+    },
+    
+    // Update last message preview
+    updateLastMessage(userId, message) {
+        const row = document.querySelector(`tr[data-id="${userId}"]`);
+        if (!row) return;
+        
+        const lastMsgCell = row.querySelector('.last-message');
+        if (lastMsgCell) {
+            lastMsgCell.textContent = message.slice(0, 50) + (message.length > 50 ? '...' : '');
+        }
+    },
+    
+    // Sort users by latest message
+    sortUsersByLatestMessage() {
+        const tbody = document.getElementById('usersTable');
+        const rows = Array.from(tbody.querySelectorAll('tr[data-id]'));
+        
+        rows.sort((a, b) => {
+            const aTime = a.dataset.lastMessageTime || 0;
+            const bTime = b.dataset.lastMessageTime || 0;
+            return bTime - aTime;
+        });
+        
+        rows.forEach(row => tbody.appendChild(row));
+    }
+};
+
+// ============================================================
+// SOCKET HANDLERS FOR ADMIN PANEL
+// ============================================================
+
+// Add to SocketManager in users.html
+function setupAdminSocketHandlers() {
+    Socket.on('user-presence', (data) => {
+        if (data.userId && data.status) {
+            UsersManagerEnhanced.updateUserPresence(data.userId, data.status);
+        }
+    });
+    
+    Socket.on('typing', (data) => {
+        if (data.isTyping) {
+            UsersManagerEnhanced.updateUserPresence(data.senderId, 'typing');
+            setTimeout(() => {
+                UsersManagerEnhanced.updateUserPresence(data.senderId, 'online');
+            }, 3000);
+        }
+    });
+    
+    Socket.on('chat-message', (data) => {
+        // Update last message for the user
+        UsersManagerEnhanced.updateLastMessage(data.senderId, data.message);
+        // Update unread count
+        UsersManagerEnhanced.updateUnreadCount(data.senderId, data.unreadCount || 0);
+        // Sort
+        UsersManagerEnhanced.sortUsersByLatestMessage();
+    });
+}
+
+// ============================================================
+// BACKEND API ENDPOINTS REQUIRED
+// ============================================================
+
+/*
+ * NEW ENDPOINTS NEEDED FOR BACKEND:
+ * 
+ * 1. GET /api/chat/conversation/:user1/:user2?page=1&limit=30
+ *    - Get conversation with pagination
+ * 
+ * 2. PUT /api/chat/read/:messageId
+ *    - Mark message as read
+ * 
+ * 3. PUT /api/chat/delivered/:messageId
+ *    - Mark message as delivered
+ * 
+ * 4. PUT /api/chat/edit/:messageId
+ *    - Edit message (with 15min check)
+ * 
+ * 5. DELETE /api/chat/delete/:messageId
+ *    - Delete message (forMe or forEveryone)
+ * 
+ * 6. PUT /api/chat/pin/:messageId
+ *    - Toggle pin message
+ * 
+ * 7. POST /api/chat/reaction/:messageId
+ *    - Add reaction
+ * 
+ * 8. DELETE /api/chat/reaction/:messageId
+ *    - Remove reaction
+ * 
+ * 9. POST /api/chat/forward/:messageId
+ *    - Forward message to another user
+ * 
+ * 10. GET /api/chat/search/:userId?q=query
+ *     - Search messages
+ * 
+ * 11. POST /api/chat/upload
+ *     - Upload file (multipart/form-data)
+ * 
+ * 12. GET /api/chat/stats/:userId
+ *     - Get chat statistics
+ * 
+ * 13. GET /api/users
+ *     - Get all users (already exists)
+ * 
+ * 14. GET /api/users/:id
+ *     - Get single user
+ * 
+ * 15. PUT /api/users/:id
+ *     - Update user
+ * 
+ * 16. DELETE /api/users/:id
+ *     - Delete user
+ * 
+ * SOCKET.IO EVENTS:
+ * 
+ * 1. 'join' - User joins with their ID
+ * 2. 'chat-message' - New message
+ * 3. 'typing' - Typing indicator
+ * 4. 'user-presence' - Online/offline status
+ * 5. 'message-read' - Message read
+ * 6. 'message-delivered' - Message delivered
+ * 7. 'message-reaction' - Reaction added/removed
+ * 8. 'message-delete' - Message deleted
+ * 9. 'message-edit' - Message edited
+ * 10. 'message-pin' - Message pinned/unpinned
+ */
+
+            // ============================================================
+            // CLEANUP ON PAGE UNLOAD
+            // ============================================================
+            window.addEventListener('beforeunload', function() {
+                UsersManager.destroy();
+                NotificationManager.stop();
+                SocketManager.disconnect();
+                if (Toast._timeout) {
+                    clearTimeout(Toast._timeout);
+                    Toast._timeout = null;
+                }
+                State.isInitialized = false;
+            });
+
+            // ============================================================
+            // INITIALIZATION
+            // ============================================================
+            function init() {
+                if (State.isInitialized) return;
+
+                const user = Utils.getCurrentUser();
+                if (!user || !user._id) {
+                    window.location.href = '/login/html/index.html';
+                    return;
+                }
+
+                State.adminId = user._id;
+                State.adminName = user.username || user.name || 'Admin';
+
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+
+                setupEventListeners();
+                SocketManager.connect();
+                UsersManager.loadUsers();
+                NotificationManager.start();
+
+                State.isInitialized = true;
+            }
+
+            // ============================================================
+            // EXPOSE PUBLIC API
+            // ============================================================
+            window.UsersManager = UsersManager;
+            window.Chat = Chat;
+            window.Toast = Toast;
+            window.SocketManager = SocketManager;
+            window.Utils = Utils;
+            window.State = State;
+
+            // ============================================================
+            // INITIALIZE ON DOM READY
+            // ============================================================
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                requestAnimationFrame(init);
+            }
+
+        })();
+    </script>
+    <!-- Til tizimi -->
+    <script src="../js/lang.js"></script>
+    <script src="../js/app-core.js"></script>
+    <script src="../js/page-settings.js"></script>
+</body>
+</html>

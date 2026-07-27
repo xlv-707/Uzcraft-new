@@ -1,0 +1,75 @@
+:root {
+            --primary: #315236;
+            --primary-dark: #1f3a26;
+            --primary-light: #4a7a52;
+            --primary-gradient: linear-gradient(135deg, #315236, #4a7a52);
+            
+            --gold: #B08A5A;
+            --gold-light: #D4B896;
+            --gold-dark: #8A6E46;
+            --gold-gradient: linear-gradient(135deg, #B08A5A, #D4B896);
+            
+            --bg-primary: #f5f7fb;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f0f2f8;
+            --bg-card: #ffffff;
+            
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #a0aec0;
+            --text-light: #ffffff;
+            
+            --border-color: rgba(0, 0, 0, 0.06);
+            --border-light: rgba(0, 0, 0, 0.04);
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.12);
+            --shadow-gold: 0 8px 30px rgba(176, 138, 90, 0.2);
+            
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 9999px;
+            
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.25s ease;
+            --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --sidebar-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #1c2333;
+            --bg-card: #1c2333;
+            
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            
+            --border-color: rgba(255, 255, 255, 0.06);
+            --border-light: rgba(255, 255, 255, 0.04);
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+            
+            --glass-bg: rgba(28, 35, 51, 0.85);
+        }
+
+        

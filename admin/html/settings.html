@@ -1,0 +1,1958 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UZCRAFT вЂ” Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme.css">
+
+    <style>
+        /* ============================================================
+           CSS VARIABLES & THEMING
+           ============================================================ */
+        
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: background var(--transition-slow), color var(--transition-slow);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: var(--radius-full); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: var(--spacing-lg) var(--spacing-md);
+            overflow-y: auto;
+            transition: transform var(--transition-slow), background var(--transition-slow);
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: 0 var(--spacing-sm);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .sidebar .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+            box-shadow: var(--shadow-gold);
+            flex-shrink: 0;
+        }
+
+        .sidebar .logo h2 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar .nav-section {
+            margin-top: var(--spacing-xl);
+        }
+
+        .sidebar .nav-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            padding: 0 var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .sidebar .menu-item {
+            height: 46px;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .sidebar .menu-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            transition: all var(--transition-base);
+            flex-shrink: 0;
+        }
+
+        .sidebar .menu-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            transform: translateX(4px);
+        }
+
+        .sidebar .menu-item.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .sidebar .menu-item.active i {
+            color: #fff;
+        }
+
+        .sidebar .arrow {
+            margin-left: auto;
+            transition: transform var(--transition-base);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .sidebar .arrow.rotate { transform: rotate(180deg); }
+
+        .sidebar .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow);
+            margin-left: var(--spacing-lg);
+            padding-left: var(--spacing-md);
+            border-left: 2px solid var(--border-color);
+        }
+
+        .sidebar .submenu.show { max-height: 200px; }
+
+        .sidebar .submenu-item {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 13px;
+            transition: all var(--transition-fast);
+            border-radius: var(--radius-sm);
+            padding-left: var(--spacing-sm);
+        }
+
+        .sidebar .submenu-item:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+
+        .sidebar .submenu-item.active {
+            color: var(--gold);
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            background: var(--bg-primary);
+            transition: background var(--transition-slow);
+        }
+
+        /* ===== TOPBAR ===== */
+        .topbar {
+            height: 72px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            padding: 0 var(--spacing-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background var(--transition-slow);
+        }
+
+        .topbar .menu-btn {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 22px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .menu-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .topbar .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .topbar .icon-btn {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 18px;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .topbar .icon-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar .badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: var(--radius-full);
+            background: #e53e3e;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .topbar .admin-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            border: none;
+            background: none;
+            cursor: pointer;
+            padding: 4px 12px 4px 4px;
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .admin-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .topbar .admin-btn .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--gold-gradient);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .topbar .admin-btn .admin-info {
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .topbar .admin-btn .admin-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .topbar .admin-btn .admin-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .topbar .dropdown {
+            position: relative;
+        }
+
+        .topbar .dropdown-menu {
+            position: absolute;
+            top: calc(100% + var(--spacing-sm));
+            right: 0;
+            min-width: 280px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            display: none;
+            overflow: hidden;
+            z-index: 999;
+            padding: var(--spacing-sm);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .topbar .dropdown.active .dropdown-menu {
+            display: block;
+            animation: dropIn 0.25s ease;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .topbar .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .topbar .dropdown-menu a:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .topbar .dropdown-menu a i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .topbar .dropdown-menu .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: var(--spacing-sm) 0;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: var(--spacing-xl) var(--spacing-xl) 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .page-header h1 span {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        .page-header .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .page-header .breadcrumb a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .page-header .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ===== SETTINGS LAYOUT ===== */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--spacing-xl);
+            align-items: start;
+        }
+
+        /* ===== SETTINGS SIDEBAR NAV ===== */
+        .settings-nav {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: var(--spacing-md);
+            transition: all var(--transition-slow);
+            position: sticky;
+            top: 100px;
+        }
+
+        .settings-nav:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .settings-nav .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-md);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .settings-nav .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .settings-nav .nav-item.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .settings-nav .nav-item.active i {
+            color: #fff;
+        }
+
+        .settings-nav .nav-item i {
+            width: 20px;
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: all var(--transition-base);
+        }
+
+        .settings-nav .nav-item.active i {
+            color: #fff;
+        }
+
+        .settings-nav .nav-item .badge {
+            margin-left: auto;
+            background: var(--gold);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+        }
+
+        .settings-nav .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: var(--spacing-sm) 0;
+        }
+
+        /* ===== SETTINGS CONTENT ===== */
+        .settings-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: var(--spacing-xl);
+            transition: all var(--transition-slow);
+        }
+
+        .settings-content:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .settings-content .section {
+            display: none;
+        }
+
+        .settings-content .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .settings-content .section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .settings-content .section .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .settings-content .section .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .settings-content .section .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .settings-content .section .form-group label .required {
+            color: #e53e3e;
+            margin-left: 2px;
+        }
+
+        .settings-content .section .form-group input,
+        .settings-content .section .form-group select,
+        .settings-content .section .form-group textarea {
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            outline: none;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            background: var(--bg-tertiary);
+        }
+
+        .settings-content .section .form-group input:focus,
+        .settings-content .section .form-group select:focus,
+        .settings-content .section .form-group textarea:focus {
+            border-color: var(--gold);
+            background: var(--bg-card);
+            box-shadow: 0 0 0 4px rgba(176, 138, 90, 0.1);
+        }
+
+        .settings-content .section .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .settings-content .section .form-group .helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: var(--spacing-xs);
+        }
+
+        .settings-content .section .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        /* ===== PAGE MANAGEMENT ===== */
+        .pages-toolbar {
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .pages-toolbar .form-group {
+            margin-bottom: 0 !important;
+        }
+
+        .pages-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .pages-summary .summary-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+        }
+
+        .pages-summary strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .pages-summary span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .pages-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .page-row {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) 110px auto auto;
+            gap: var(--spacing-md);
+            align-items: center;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+        }
+
+        .page-title {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .page-path {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 4px;
+            word-break: break-all;
+        }
+
+        .page-area {
+            justify-self: start;
+            border-radius: var(--radius-full);
+            padding: 5px 10px;
+            background: rgba(176, 138, 90, 0.14);
+            color: var(--gold-dark);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .page-area.admin {
+            background: rgba(49, 82, 54, 0.14);
+            color: var(--primary);
+        }
+
+        .page-open-btn {
+            padding: 8px 14px;
+        }
+
+        /* ===== TOGGLE SWITCH ===== */
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-wrapper .toggle-info {
+            flex: 1;
+        }
+
+        .toggle-wrapper .toggle-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-wrapper .toggle-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle .slider {
+            position: absolute;
+            inset: 0;
+            background: var(--border-color);
+            border-radius: var(--radius-full);
+            transition: all var(--transition-base);
+        }
+
+        .toggle .slider::before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background: #fff;
+            border-radius: var(--radius-full);
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toggle input:checked + .slider {
+            background: var(--primary);
+        }
+
+        .toggle input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(49, 82, 54, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #fff;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            z-index: 99999;
+            display: none;
+            animation: slideUp 0.3s ease;
+            max-width: 420px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast.success { border-left: 4px solid #16a34a; }
+        .toast.error { border-left: 4px solid #ef4444; }
+        .toast.info { border-left: 4px solid var(--gold); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main {
+                margin-left: 0;
+            }
+            .topbar .menu-btn {
+                display: block;
+            }
+            .topbar .admin-btn .admin-info {
+                display: none;
+            }
+            .content {
+                padding: var(--spacing-md) var(--spacing-md) 0;
+            }
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+            .settings-nav {
+                position: static;
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-xs);
+                padding: var(--spacing-sm);
+            }
+            .settings-nav .nav-item {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 13px;
+            }
+            .settings-nav .divider {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 0 var(--spacing-md);
+            }
+            .topbar .topbar-right {
+                gap: var(--spacing-xs);
+            }
+            .topbar .admin-btn {
+                padding: 4px;
+            }
+            .topbar .admin-btn .avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+            .topbar .icon-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 15px;
+            }
+            .topbar .dropdown-menu {
+                right: -40px;
+                min-width: 200px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .settings-content {
+                padding: var(--spacing-md);
+            }
+
+            .settings-content .section .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .toggle-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: var(--spacing-sm) var(--spacing-sm) 0;
+            }
+
+            .page-header h1 {
+                font-size: 18px;
+            }
+            .page-header .breadcrumb {
+                font-size: 12px;
+            }
+
+            .settings-content {
+                padding: var(--spacing-sm);
+            }
+
+            .settings-content .section h2 {
+                font-size: 18px;
+            }
+
+            .settings-nav .nav-item {
+                min-width: 80px;
+                font-size: 12px;
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+            .settings-nav .nav-item i {
+                font-size: 14px;
+            }
+
+            .btn {
+                font-size: 13px;
+                padding: 8px 20px;
+            }
+
+            .toast {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+        }
+
+        .sidebar.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+<!-- ===== TOAST ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="logo">
+        <div class="logo-icon">U</div>
+        <h2>UZCRAFT</h2>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Main</div>
+        <a href="../html/dashboard.html" class="menu-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Commerce</div>
+        <div class="product-section">
+            <div class="menu-item" id="productsBtn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>Products</span>
+                <i class="fa-solid fa-chevron-down arrow"></i>
+            </div>
+            <div class="submenu" id="productsSubmenu">
+                <a href="../html/all-products.html" class="submenu-item">All Products</a>
+                <a href="../html/admin-product-stock.html" class="submenu-item">Add Product</a>
+            </div>
+        </div>
+        <a href="../html/orders.html" class="menu-item">
+            <i class="fa-solid fa-box"></i>
+            <span>Orders</span>
+            <span class="badge" style="margin-left:auto;background:var(--gold);color:#fff;font-size:11px;font-weight:700;padding:2px 10px;border-radius:var(--radius-full);">12</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Management</div>
+        <a href="../html/users.html" class="menu-item">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+        </a>
+        <a href="../html/settings.html" class="menu-item active">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar">
+        <button id="menuBtn" class="menu-btn" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="topbar-right">
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                <i class="fa-regular fa-moon"></i>
+            </button>
+
+            <div class="dropdown">
+                <button class="dropdown-btn icon-btn" aria-label="Language">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" onclick="changeLanguage('en')">English</a>
+                    <a href="#" onclick="changeLanguage('ru')">Р СѓСЃСЃРєРёР№</a>
+                    <a href="#" onclick="changeLanguage('uz')">O'zbek</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropdown-btn icon-btn notification-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Order</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">#ORD-2024 from John Doe</p>
+                    </div>
+                    <div style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Customer</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">Jane Smith registered</p>
+                    </div>
+                    <div style="padding:10px 16px;">
+                        <strong style="font-size:13px;color:var(--text-primary);">Product Updated</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">3 products updated</p>
+                    </div>
+                    <div class="divider"></div>
+                    <a href="#"><i class="fa-regular fa-bell"></i> View all notifications</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropdown-btn admin-btn">
+                    <div class="avatar">A</div>
+                    <div class="admin-info">
+                        <h4>Admin</h4>
+                        <p>Super Admin</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fa-regular fa-user"></i> Profile</a>
+                    <a href="../html/settings.html"><i class="fa-regular fa-gear"></i> Settings</a>
+                    <div class="divider"></div>
+                    <a href="#" id="logoutBtn" style="color:#e53e3e;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>вљ™пёЏ <span>Settings</span></h1>
+                <p>Manage your store configuration and preferences</p>
+            </div>
+            <div class="breadcrumb">
+                <a href="#">Home</a>
+                <i class="fa-solid fa-chevron-right" style="font-size:10px;color:var(--text-muted);"></i>
+                <span style="color:var(--text-secondary);font-weight:500;">Settings</span>
+            </div>
+        </div>
+
+        <!-- Settings Layout -->
+        <div class="settings-layout">
+
+            <!-- Settings Navigation -->
+            <nav class="settings-nav" role="tablist">
+                <button class="nav-item active" data-section="general" role="tab">
+                    <i class="fa-solid fa-sliders"></i>
+                    General
+                </button>
+                <button class="nav-item" data-section="store" role="tab">
+                    <i class="fa-solid fa-store"></i>
+                    Store
+                </button>
+                <button class="nav-item" data-section="pages" role="tab">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Pages
+                    <span class="badge">25</span>
+                </button>
+                <button class="nav-item" data-section="payment" role="tab">
+                    <i class="fa-solid fa-credit-card"></i>
+                    Payment
+                </button>
+                <button class="nav-item" data-section="shipping" role="tab">
+                    <i class="fa-solid fa-truck"></i>
+                    Shipping
+                </button>
+                <button class="nav-item" data-section="email" role="tab">
+                    <i class="fa-solid fa-envelope"></i>
+                    Email
+                    <span class="badge">3</span>
+                </button>
+                <button class="nav-item" data-section="security" role="tab">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Security
+                </button>
+                <button class="nav-item" data-section="advanced" role="tab">
+                    <i class="fa-solid fa-code"></i>
+                    Advanced
+                </button>
+                <div class="divider"></div>
+                <button class="nav-item" data-section="danger" role="tab" style="color:#e53e3e;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color:#e53e3e;"></i>
+                    Danger Zone
+                </button>
+            </nav>
+
+            <!-- Settings Content -->
+            <div class="settings-content">
+
+                <!-- General Section -->
+                <div class="section active" id="section-general">
+                    <h2>General Settings</h2>
+                    <p class="subtitle">Configure your store's basic information and preferences</p>
+
+                    <div class="form-group">
+                        <label>Site Name <span class="required">*</span></label>
+                        <input type="text" id="storeName" value="UZCRAFT" placeholder="Enter store name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Site Description</label>
+                        <textarea id="siteDescription" rows="3" placeholder="Enter site description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Site Logo</label>
+                        <input type="text" id="siteLogo" placeholder="Paste logo image URL or path">
+                        <span class="helper">Example: /img/logo.png or a full image URL</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Site Email <span class="required">*</span></label>
+                            <input type="email" id="storeEmail" value="info@uzcraft.com" placeholder="Enter store email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="storePhone" value="+998 90 123 45 67" placeholder="Enter phone number">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Site Address</label>
+                        <textarea id="storeAddress" rows="3">Tashkent, Uzbekistan</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select id="storeCurrency">
+                                <option value="USD" selected>USD ($)</option>
+                                <option value="EUR">EUR (в‚¬)</option>
+                                <option value="GBP">GBP (ВЈ)</option>
+                                <option value="UZS">UZS (so'm)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Language</label>
+                            <select id="storeLanguage">
+                                <option value="en" selected>English</option>
+                                <option value="ru">Р СѓСЃСЃРєРёР№</option>
+                                <option value="uz">O'zbek</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Timezone</label>
+                        <select id="siteTimezone">
+                            <option value="Asia/Tashkent">Asia/Tashkent</option>
+                            <option value="UTC">UTC</option>
+                            <option value="Europe/Moscow">Europe/Moscow</option>
+                            <option value="America/New_York">America/New_York</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('general')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetSettings('general')">
+                            <i class="fa-solid fa-rotate"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Store Section -->
+                <div class="section" id="section-store">
+                    <h2>Store Settings</h2>
+                    <p class="subtitle">Configure your store appearance and catalog</p>
+
+                    <div class="form-group">
+                        <label>Store Description</label>
+                        <textarea id="storeDescription" rows="3">UZCRAFT - Premium handmade crafts from Uzbekistan</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Products Per Page</label>
+                            <select id="productsPerPage">
+                                <option value="12" selected>12</option>
+                                <option value="24">24</option>
+                                <option value="48">48</option>
+                                <option value="96">96</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Sort Order</label>
+                            <select id="defaultSort">
+                                <option value="newest" selected>Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="price_asc">Price: Low to High</option>
+                                <option value="price_desc">Price: High to Low</option>
+                                <option value="popular">Most Popular</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>Enable Customer Reviews</h4>
+                            <p>Allow customers to leave reviews and ratings on products</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="enableReviews" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Show Out of Stock Products</h4>
+                            <p>Display products that are out of stock in your store</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="showOutOfStock">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('store')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pages Section -->
+                <div class="section" id="section-pages">
+                    <h2>Pages Management</h2>
+                    <p class="subtitle">Control admin and client pages from one place.</p>
+
+                    <div class="pages-toolbar">
+                        <div class="form-group">
+                            <label>Search Pages</label>
+                            <input type="text" id="pageSearch" placeholder="Search by page name or path">
+                        </div>
+                        <div class="form-group">
+                            <label>Area</label>
+                            <select id="pageAreaFilter">
+                                <option value="all">All pages</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Client">Client</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="pages-summary">
+                        <div class="summary-card">
+                            <strong id="totalPagesCount">0</strong>
+                            <span>Total pages</span>
+                        </div>
+                        <div class="summary-card">
+                            <strong id="enabledPagesCount">0</strong>
+                            <span>Enabled</span>
+                        </div>
+                        <div class="summary-card">
+                            <strong id="disabledPagesCount">0</strong>
+                            <span>Disabled</span>
+                        </div>
+                    </div>
+
+                    <div class="pages-list" id="pagesList"></div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="savePageSettings()">
+                            <i class="fa-solid fa-check"></i> Save Page Settings
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetPageSettings()">
+                            <i class="fa-solid fa-rotate"></i> Reset All Pages
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Payment Section -->
+                <div class="section" id="section-payment">
+                    <h2>Payment Settings</h2>
+                    <p class="subtitle">Configure payment gateways and methods</p>
+
+                    <div class="toggle-wrapper" style="margin-bottom:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Stripe Connection</h4>
+                            <p id="stripeStatus">Not connected</p>
+                        </div>
+                        <button class="btn btn-secondary" type="button" id="testStripeBtn">
+                            <i class="fa-solid fa-plug"></i> Test Connection
+                        </button>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>Stripe</h4>
+                            <p>Accept credit card payments via Stripe</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="stripeEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>PayPal</h4>
+                            <p>Accept payments via PayPal</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="paypalEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Cash on Delivery</h4>
+                            <p>Allow customers to pay cash upon delivery</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="codEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-row" style="margin-top:var(--spacing-lg);">
+                        <div class="form-group">
+                            <label>Stripe Secret Key</label>
+                            <input type="password" id="stripeSecret" value="sk_test_xxxxxxxxxxxxxxxx" placeholder="Enter secret key">
+                            <span class="helper">Your Stripe secret key for live mode</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Stripe Publishable Key</label>
+                            <input type="text" id="stripePublishable" value="pk_test_xxxxxxxxxxxxxxxx" placeholder="Enter publishable key">
+                            <span class="helper">Your Stripe publishable key</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('payment')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Shipping Section -->
+                <div class="section" id="section-shipping">
+                    <h2>Shipping Settings</h2>
+                    <p class="subtitle">Configure shipping methods and zones</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Free Shipping Threshold ($)</label>
+                            <input type="number" id="freeShippingThreshold" value="50" placeholder="Enter amount">
+                            <span class="helper">Orders above this amount qualify for free shipping</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Default Shipping Rate ($)</label>
+                            <input type="number" id="defaultShippingRate" value="5.99" step="0.01" placeholder="Enter rate">
+                            <span class="helper">Default shipping rate for domestic orders</span>
+                        </div>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>International Shipping</h4>
+                            <p>Enable shipping to international destinations</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="internationalShipping" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Express Shipping</h4>
+                            <p>Offer express shipping option for faster delivery</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="expressShipping" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('shipping')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Email Section -->
+                <div class="section" id="section-email">
+                    <h2>Email Settings</h2>
+                    <p class="subtitle">Configure email notifications and templates</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>SMTP Host</label>
+                            <input type="text" id="smtpHost" value="smtp.gmail.com" placeholder="Enter SMTP host">
+                        </div>
+                        <div class="form-group">
+                            <label>SMTP Port</label>
+                            <input type="number" id="smtpPort" value="587" placeholder="Enter port">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="smtpEmail" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label>SMTP Password</label>
+                            <input type="password" id="smtpPassword" value="password123" placeholder="Enter password">
+                        </div>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>Order Confirmation Emails</h4>
+                            <p>Send confirmation emails to customers after purchase</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="orderEmailEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Status Update Emails</h4>
+                            <p>Send status update notifications to customers</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="statusEmailEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('email')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                        <button class="btn btn-secondary" onclick="sendTestEmail()">
+                            <i class="fa-solid fa-paper-plane"></i> Send Test Email
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="section" id="section-security">
+                    <h2>Security Settings</h2>
+                    <p class="subtitle">Configure security and authentication preferences</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Password Length</label>
+                            <input type="number" id="passwordLength" value="8" min="4" placeholder="Minimum password length">
+                            <span class="helper">Registration must follow this minimum length</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Session Timeout (minutes)</label>
+                            <input type="number" id="sessionTimeout" value="60" placeholder="Enter timeout">
+                            <span class="helper">Automatically log out inactive users after this time</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Max Login Attempts</label>
+                            <input type="number" id="maxLoginAttempts" value="5" placeholder="Enter attempts">
+                            <span class="helper">Lock account after failed login attempts</span>
+                        </div>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>Registration</h4>
+                            <p>Allow new customers to register</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="registrationEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Login</h4>
+                            <p>Allow users to log in</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="loginEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Guest Checkout</h4>
+                            <p>Allow orders without a logged-in account</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="guestCheckoutEnabled" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Two-Factor Authentication</h4>
+                            <p>Require 2FA for admin accounts (recommended)</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="twoFactorEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Auto Backups</h4>
+                            <p>Automatically backup store data daily</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="autoBackups" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('security')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                        <button class="btn btn-secondary" onclick="backupNow()">
+                            <i class="fa-solid fa-download"></i> Backup Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Section -->
+                <div class="section" id="section-advanced">
+                    <h2>Advanced Settings</h2>
+                    <p class="subtitle">Developer and system-level configurations</p>
+
+                    <div class="form-group">
+                        <label>API Key</label>
+                        <div style="display:flex;gap:var(--spacing-sm);">
+                            <input type="text" id="apiKey" value="uzc_xxxxxxxxxxxxxx" placeholder="API Key" style="flex:1;">
+                            <button class="btn btn-secondary" onclick="regenerateApiKey()">
+                                <i class="fa-solid fa-rotate"></i> Regenerate
+                            </button>
+                        </div>
+                        <span class="helper">API key for external integrations</span>
+                    </div>
+
+                    <div style="background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:var(--spacing-lg);margin-bottom:var(--spacing-lg);">
+                        <h4 style="font-size:16px;color:var(--text-primary);margin-bottom:var(--spacing-sm);">Backup & Restore</h4>
+                        <p style="font-size:13px;color:var(--text-muted);margin-bottom:var(--spacing-md);">Create, download, or restore JSON backups.</p>
+                        <div class="form-actions" style="border-top:none;margin-top:0;padding-top:0;">
+                            <button class="btn btn-secondary" type="button" onclick="backupNow()">
+                                <i class="fa-solid fa-database"></i> Create Backup
+                            </button>
+                            <button class="btn btn-gold" type="button" onclick="exportAllData()">
+                                <i class="fa-solid fa-download"></i> Download Backup
+                            </button>
+                            <input type="file" id="restoreFile" accept="application/json" style="max-width:240px;">
+                            <button class="btn btn-secondary" type="button" id="restoreBackupBtn">
+                                <i class="fa-solid fa-upload"></i> Restore
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="toggle-wrapper">
+                        <div class="toggle-info">
+                            <h4>Maintenance Mode</h4>
+                            <p>Put your store in maintenance mode</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="maintenanceMode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-wrapper" style="margin-top:var(--spacing-md);">
+                        <div class="toggle-info">
+                            <h4>Debug Mode</h4>
+                            <p>Enable debug logging for development</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="debugMode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings('advanced')">
+                            <i class="fa-solid fa-check"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="section" id="section-danger">
+                    <h2 style="color:#e53e3e;">вљ пёЏ Danger Zone</h2>
+                    <p class="subtitle">These actions are irreversible. Use with extreme caution.</p>
+
+                    <div style="background:var(--bg-tertiary);border:2px solid #fde8e8;border-radius:var(--radius-md);padding:var(--spacing-lg);margin-top:var(--spacing-lg);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--spacing-md);">
+                            <div>
+                                <h4 style="color:#e53e3e;font-size:16px;">Clear All Data</h4>
+                                <p style="color:var(--text-muted);font-size:13px;">Permanently delete all products, orders, and user data</p>
+                            </div>
+                            <button class="btn btn-danger" onclick="clearAllData()">
+                                <i class="fa-solid fa-trash-can"></i> Clear All Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="background:var(--bg-tertiary);border:2px solid #fde8e8;border-radius:var(--radius-md);padding:var(--spacing-lg);margin-top:var(--spacing-md);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--spacing-md);">
+                            <div>
+                                <h4 style="color:#e53e3e;font-size:16px;">Delete Store</h4>
+                                <p style="color:var(--text-muted);font-size:13px;">Permanently delete your entire store</p>
+                            </div>
+                            <button class="btn btn-danger" onclick="deleteStore()">
+                                <i class="fa-solid fa-trash-can"></i> Delete Store
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="background:var(--bg-tertiary);border:2px solid #fde8e8;border-radius:var(--radius-md);padding:var(--spacing-lg);margin-top:var(--spacing-md);">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--spacing-md);">
+                            <div>
+                                <h4 style="color:#e53e3e;font-size:16px;">Export All Data</h4>
+                                <p style="color:var(--text-muted);font-size:13px;">Download a backup of all store data</p>
+                            </div>
+                            <button class="btn btn-gold" onclick="exportAllData()">
+                                <i class="fa-solid fa-download"></i> Export Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="../js/theme.js"></script>
+<script src="../js/app-core.js"></script>
+<script src="../js/page-settings.js"></script>
+<script>
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    clearTimeout(toast.timeout);
+    toast.timeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3500);
+}
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("show");
+});
+
+document.addEventListener("click", (e) => {
+    if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+            sidebar.classList.remove("show");
+        }
+    }
+});
+
+// ============================================================
+// DROPDOWNS
+// ============================================================
+document.querySelectorAll(".dropdown-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const dropdown = btn.closest(".dropdown");
+        document.querySelectorAll(".dropdown").forEach(item => {
+            if (item !== dropdown) item.classList.remove("active");
+        });
+        dropdown.classList.toggle("active");
+    });
+});
+
+document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown").forEach(item => {
+        item.classList.remove("active");
+    });
+});
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("currentUser");
+    showToast("Logged out successfully", "success");
+    setTimeout(() => {
+        window.location.href = "/login/html/index.html";
+    }, 500);
+});
+
+// ============================================================
+// PRODUCTS SUBMENU
+// ============================================================
+const productsBtn = document.getElementById("productsBtn");
+const productsSubmenu = document.getElementById("productsSubmenu");
+const arrow = document.querySelector(".arrow");
+
+productsBtn.addEventListener("click", () => {
+    productsSubmenu.classList.toggle("show");
+    arrow.classList.toggle("rotate");
+});
+
+// ============================================================
+// THEME TOGGLE
+// ============================================================
+
+
+// ============================================================
+// LANGUAGE CHANGE
+// ============================================================
+function changeLanguage(lang) {
+    const names = { en: 'English', ru: 'Р СѓСЃСЃРєРёР№', uz: "O'zbek" };
+    showToast(`Language changed to ${names[lang]}`, 'success');
+}
+
+// ============================================================
+// SETTINGS NAVIGATION
+// ============================================================
+const navItems = document.querySelectorAll('.settings-nav .nav-item');
+const sections = {
+    general: document.getElementById('section-general'),
+    store: document.getElementById('section-store'),
+    pages: document.getElementById('section-pages'),
+    payment: document.getElementById('section-payment'),
+    shipping: document.getElementById('section-shipping'),
+    email: document.getElementById('section-email'),
+    security: document.getElementById('section-security'),
+    advanced: document.getElementById('section-advanced'),
+    danger: document.getElementById('section-danger')
+};
+
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        // Remove active from all nav items
+        navItems.forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+
+        // Hide all sections
+        Object.values(sections).forEach(s => s.classList.remove('active'));
+
+        // Show selected section
+        const section = this.dataset.section;
+        if (sections[section]) {
+            sections[section].classList.add('active');
+        }
+    });
+});
+
+// ============================================================
+// SETTINGS FUNCTIONS
+// ============================================================
+function saveSettings(section) {
+    showToast(`вњ… ${section.charAt(0).toUpperCase() + section.slice(1)} settings saved!`, 'success');
+}
+
+function resetSettings(section) {
+    if (confirm(`Are you sure you want to reset ${section} settings to default?`)) {
+        showToast(`рџ”„ ${section} settings reset`, 'info');
+    }
+}
+
+function sendTestEmail() {
+    showToast('рџ“§ Test email sent successfully!', 'success');
+}
+
+function backupNow() {
+    showToast('рџ’ѕ Backup created successfully!', 'success');
+}
+
+function regenerateApiKey() {
+    const key = 'uzc_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    document.getElementById('apiKey').value = key;
+    showToast('рџ”‘ API key regenerated', 'success');
+}
+
+function clearAllData() {
+    if (confirm('вљ пёЏ Are you sure you want to delete ALL data? This action is irreversible!')) {
+        if (confirm('вљ пёЏвљ пёЏ FINAL WARNING: This will permanently delete all products, orders, and users. Are you ABSOLUTELY sure?')) {
+            showToast('рџ—‘пёЏ All data cleared (simulated)', 'error');
+        }
+    }
+}
+
+function deleteStore() {
+    if (confirm('вљ пёЏ Are you sure you want to DELETE your entire store? This action is irreversible!')) {
+        if (confirm('вљ пёЏвљ пёЏ FINAL WARNING: This will permanently delete your entire store. Type "DELETE" to confirm:')) {
+            showToast('рџЏЄ Store deleted (simulated)', 'error');
+        }
+    }
+}
+
+function exportAllData() {
+    showToast('рџ“¦ Data export started (simulated)', 'success');
+}
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        const activeSection = document.querySelector('.section.active');
+        if (activeSection) {
+            e.preventDefault();
+            const id = activeSection.id.replace('section-', '');
+            saveSettings(id);
+        }
+    }
+});
+
+// ============================================================
+// LOAD CURRENT USER
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (!user) {
+        window.location.href = '/login/html/index.html';
+        return;
+    }
+    
+    loadPageDraft();
+    renderManagedPages();
+    document.getElementById('pageSearch')?.addEventListener('input', renderManagedPages);
+    document.getElementById('pageAreaFilter')?.addEventListener('change', renderManagedPages);
+
+    // Update avatar
+    const avatar = document.querySelector('.avatar');
+    if (avatar && user.name) {
+        avatar.textContent = user.name.charAt(0).toUpperCase();
+    }
+    const adminName = document.querySelector('.admin-btn .admin-info h4');
+    if (adminName && user.name) {
+        adminName.textContent = user.name;
+    }
+    const adminRole = document.querySelector('.admin-btn .admin-info p');
+    if (adminRole && user.role) {
+        adminRole.textContent = user.role;
+    }
+});
+</script>
+<!-- Til tizimi -->
+<script src="../js/lang.js"></script>
+</body>
+</html>

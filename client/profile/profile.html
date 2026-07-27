@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - UZCRAFT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../profile/profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container" onclick="window.location.href='../html/index.html'">
+            <svg class="logo-icon" viewBox="0 0 100 100">
+                <polygon points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="6" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="18" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="50" cy="20" rx="5" ry="10" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="50" cy="80" rx="5" ry="10" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="20" cy="50" rx="10" ry="5" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="80" cy="50" rx="10" ry="5" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="30" cy="30" rx="5" ry="10" transform="rotate(-45 30 30)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="70" cy="30" rx="5" ry="10" transform="rotate(45 70 30)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="30" cy="70" rx="5" ry="10" transform="rotate(45 30 70)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="70" cy="70" rx="5" ry="10" transform="rotate(-45 70 70)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+            </svg>
+            <div class="brand-text">
+                <h1>UZCRAFT</h1>
+                <p>MADE IN UZBEKISTAN</p>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="../html/index.html">Home</a></li>
+            <li><a href="../html/collection.html">Collections</a></li>
+            <li><a href="../html/catigories.html">Categories</a></li>
+            <li><a href="../html/about.html">About</a></li>
+            <li><a href="../html/contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-heart" id="wishlistIcon"></i>
+            <i class="fa-regular fa-user" id="userIcon" style="cursor:pointer;"></i>
+            <span id="userName"></span>
+            <div class="cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cartCount">0</span>
+            </div>
+            <div class="language">
+                <span id="en" class="active">EN</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Content -->
+    <main class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-avatar">
+                <i class="fa-regular fa-user"></i>
+            </div>
+            <h2 id="profileName">User</h2>
+            <p id="profileEmail">user@example.com</p>
+            <div class="profile-stats">
+                <div class="stat">
+                    <span class="stat-number" id="orderCount">0</span>
+                    <span class="stat-label">Orders</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="wishlistCount">0</span>
+                    <span class="stat-label">Wishlist</span>
+                </div>
+            </div>
+            <!-- Logout tugmasi - id="logoutBtn" qo'shildi -->
+            <button class="logout-btn" id="logoutBtn" onclick="logoutUser()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </button>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="orders" onclick="switchTab('orders')">
+                    <i class="fa-solid fa-box"></i> My Orders
+                </button>
+                <button class="tab-btn" data-tab="wishlist" onclick="switchTab('wishlist')">
+                    <i class="fa-regular fa-heart"></i> Wishlist
+                </button>
+                <button class="tab-btn" data-tab="notifications" onclick="switchTab('notifications')">
+                    <i class="fa-regular fa-bell"></i>
+                    Notifications
+                    <span id="notificationBadge">0</span>
+                </button>
+                <button class="tab-btn" data-tab="settings" onclick="switchTab('settings')">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </button>
+            </div>
+
+            <!-- Orders Tab -->
+            <div class="tab-content active" id="ordersTab">
+                <h3><i class="fa-solid fa-box"></i> My Orders</h3>
+                <div id="ordersContainer" class="orders-list">
+                    <div class="empty-state">
+                        <i class="fa-regular fa-box-open"></i>
+                        <p>You have no orders yet</p>
+                        <a href="../html/collection.html" class="shop-btn">Start Shopping</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wishlist Tab -->
+            <div class="tab-content" id="wishlistTab">
+                <h3><i class="fa-regular fa-heart"></i> My Wishlist</h3>
+                <div id="wishlistContainer" class="wishlist-grid-profile">
+                    <div class="empty-state">
+                        <i class="fa-regular fa-heart"></i>
+                        <p>Your wishlist is empty</p>
+                        <a href="../html/collection.html" class="shop-btn">Browse Products</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="notificationsTab">
+
+                <h3>
+                    <i class="fa-regular fa-bell"></i>
+                    Notifications
+                </h3>
+
+                <div id="notificationsContainer">
+
+                    <div class="empty-state">
+
+                        <i class="fa-regular fa-bell-slash"></i>
+
+                        <p>No notifications yet</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settingsTab">
+                <h3><i class="fa-solid fa-gear"></i> Account Settings</h3>
+                <form id="settingsForm" class="settings-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="settingsName" placeholder="Your full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="settingsEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="settingsPhone" placeholder="+998 99 123 45 67">
+                    </div>
+                    <div class="form-group">
+                        <label>Shipping Address</label>
+                        <textarea id="settingsAddress" rows="3" placeholder="Your shipping address"></textarea>
+                    </div>
+                    <button type="submit" class="save-btn">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="../profile/main.js"></script>
+<script src="/admin/js/app-core.js"></script>
+<script src="/admin/js/page-settings.js"></script>
+<script src="../js/client-actions.js"></script>
+</body>
+</html>

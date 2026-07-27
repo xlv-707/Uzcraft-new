@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textiles Collection - UZCRAFT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/textiles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100">
+                <polygon points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="6" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="18" fill="none" stroke="#B08A5A" stroke-width="2"/>
+                <circle cx="50" cy="50" r="30" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="50" cy="20" rx="5" ry="10" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="50" cy="80" rx="5" ry="10" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="20" cy="50" rx="10" ry="5" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="80" cy="50" rx="10" ry="5" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="30" cy="30" rx="5" ry="10" transform="rotate(-45 30 30)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="70" cy="30" rx="5" ry="10" transform="rotate(45 70 30)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="30" cy="70" rx="5" ry="10" transform="rotate(45 30 70)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+                <ellipse cx="70" cy="70" rx="5" ry="10" transform="rotate(-45 70 70)" fill="none" stroke="#B08A5A" stroke-width="1.5"/>
+            </svg>
+            <div class="brand-text">
+                <h1>UZCRAFT</h1>
+                <p>MADE IN UZBEKISTAN</p>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="/client/html/index.html" data-key="home">Home</a></li>
+            <li><a href="/client/html/collection.html" data-key="collections">Collections</a></li>
+            <li><a data-key="new" href="/client/html/catigories.html" class="active">Categories</a></li>
+            <li><a data-key="about" href="/client/html/about.html">About</a></li>
+            <li><a data-key="contact" href="/client/html/contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-heart" id="wishlistIcon"></i>
+            <i class="fa-regular fa-user" id="userIcon" style="cursor:pointer;"></i>
+            <span id="userName"></span>
+
+            <div class="cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cartCount">0</span>
+            </div>
+
+            <div class="language">
+                <span id="en" class="active">EN</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <h1>Stationery Collection</h1>
+            <p class="subtitle">Handcrafted textiles with authentic Uzbek artistry</p>
+            <div class="header-stats">
+                <span class="stat"><i class="fa-solid fa-layer-group"></i> <span id="productCount">0</span> Products</span>
+                <span class="stat"><i class="fa-regular fa-clock"></i> <span id="recentCount">0</span> Recently Viewed</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="products">
+        <div id="productsContainer" class="products-grid"></div>
+    </main>
+
+    <!-- Recently Viewed Section -->
+    <section class="recently-viewed" id="recentlyViewedSection" style="display:none;">
+        <div class="section-header">
+            <h2><i class="fa-regular fa-clock"></i> Recently Viewed</h2>
+            <button class="clear-recent" onclick="clearRecentlyViewed()">Clear All</button>
+        </div>
+        <div id="recentlyViewedContainer" class="products-grid"></div>
+    </section>
+    
+    <!-- Scripts -->
+    <script src="../js/stationery.js"></script>
+<script src="/admin/js/app-core.js"></script>
+<script src="/admin/js/page-settings.js"></script>
+<script src="../../js/client-actions.js"></script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UZCRAFT</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="/img/f39c7b05-a1e3-4123-b077-35e9f6dd4903.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100">
+                <!-- Tashqi shakl -->
+                <polygon
+                    points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <!-- Ichki naqsh -->
+                <circle cx="50" cy="50" r="6"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="18"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="30"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <!-- Gul yaproqlari -->
+                <ellipse cx="50" cy="20" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="50" cy="80" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="20" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="80" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="30" rx="5" ry="10"
+                    transform="rotate(-45 30 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="30" rx="5" ry="10"
+                    transform="rotate(45 70 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="70" rx="5" ry="10"
+                    transform="rotate(45 30 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="70" rx="5" ry="10"
+                    transform="rotate(-45 70 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+            </svg>
+
+            <div class="brand-text">
+                <h1>UZCRAFT</h1>
+                <p>MADE IN UZBEKISTAN</p>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+
+            <li><a href="../html/index.html" class="active" data-key="home">Home</a></li>
+            <li><a href="../html/collection.html" data-key="collections">Collections</a></li>
+            <li><a data-key="new" href="../html/catigories.html">Categories</a></li>
+            <li><a data-key="about" href="../html/about.html">About</a></li>
+            <li><a data-key="contact" href="../html/contact.html">Contact</a></li>
+
+        </ul>
+
+        <div class="nav-icons">
+            
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-user" id="userIcon" style="cursor:pointer;"></i>
+            <span id="userName"></span>
+
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-overlay"></div>
+    </nav>
+
+    <main>
+        <div class="main-div1">
+            <div class="main-div-1">
+                <svg class="logo-icon" viewBox="0 0 100 100">
+                    <!-- Tashqi shakl -->
+                    <polygon
+                        points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="2"
+                    />
+
+                    <!-- Ichki naqsh -->
+                    <circle cx="50" cy="50" r="6"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="2"
+                    />
+
+                    <circle cx="50" cy="50" r="18"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="2"
+                    />
+
+                    <circle cx="50" cy="50" r="30"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+
+                    <!-- Gul yaproqlari -->
+                    <ellipse cx="50" cy="20" rx="5" ry="10"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+
+                    <ellipse cx="50" cy="80" rx="5" ry="10"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="20" cy="50" rx="10" ry="5"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="80" cy="50" rx="10" ry="5"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="30" cy="30" rx="5" ry="10"
+                        transform="rotate(-45 30 30)"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="70" cy="30" rx="5" ry="10"
+                        transform="rotate(45 70 30)"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="30" cy="70" rx="5" ry="10"
+                        transform="rotate(45 30 70)"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                    <ellipse cx="70" cy="70" rx="5" ry="10"
+                        transform="rotate(-45 70 70)"
+                        fill="none"
+                        stroke="#B08A5A"
+                        stroke-width="1.5"
+                    />
+                </svg>
+                <div class="brand-text">
+                    <p>MADE IN UZBEKISTAN</p>
+                </div>
+            </div>
+
+            <h1 class="main-div-h1">
+                Discover the <br>
+                Authentic Spirit of <br>
+                <span class="gold-text">Uzbekistan</span>
+            </h1>
+            <p class="main-div-p">
+                Traditional crafts, timeless beauty.
+                <br>
+                Delivered to your world.
+            </p>
+            <button class="explore-btn">
+                EXPLORE COLLECTION
+                <span>→</span>
+            </button>
+        </div>
+
+        <div class="main-div2">
+            <img class="main-div-img" src="/img/e6530a10-6dbf-455e-9c37-9e4107143f5f.png" alt="">
+        </div>
+    </main>
+
+    <h2 class="categories-h2">FEATURED CATEGORIES</h2>
+    <P class="categories-p">Explore our most collections, inspired by centuries of Uzbek heritage.</P>
+
+    <div class="categories-wrapper">
+
+        <button class="slide-btn prev">❮</button>
+
+        <div class="categories-div">
+
+            <div class="categories-div-1" data-link="/client/product/html/ceramics.html">
+                <img class="categories-div-1-img" src="/img/bf20a979-31d1-4e1d-ac3c-0d01b3a4c2b6.png">
+                <h4>Ceramics</h4>
+                <p>Hand-painted beauty<span>→</span></p>
+            </div>
+
+            <div class="categories-div-1" data-link="/client/product/html/textiles.html">
+                <img class="categories-div-1-img" src="/img/7aafaf45-2736-48c9-bb76-5dfacc75b4b8.png">
+                <h4>Textiles</h4>
+                <p>Traditional ikat & fabrics<span>→</span></p>
+            </div>
+
+            <div class="categories-div-1" data-link="/client/product/html/wooden.html">
+                <img class="categories-div-1-img" src="/img/94784332-ba68-4b40-8efb-ce9c0e0035c8.png">
+                <h4>Wooden Crafts</h4>
+                <p>Handcrafted elegance<span>→</span></p>
+            </div>
+
+            <div class="categories-div-1" data-link="/client/product/html/jewelry.html">
+                <img class="categories-div-1-img" src="/img/52849f0c-48cd-4bdc-bd78-2530da3e0045.png">
+                <h4>Jewelry</h4>
+                <p>Timeless silver pieces<span>→</span></p>
+            </div>
+
+            <div class="categories-div-1" data-link="/client/product/html/accessories.html">
+                <img class="categories-div-1-img" src="/img/25fc3c18-96cd-47b3-918e-9d41935cf140.png">
+                <h4>Accessories</h4>
+                <p>Unique and authentic<span>→</span></p>
+            </div>
+
+            <div class="categories-div-1">
+                <img class="categories-div-1-img" src="/img/bf20a979-31d1-4e1d-ac3c-0d01b3a4c2b6.png">
+                <h4>Jewelry</h4>
+                <p>Elegant designs<span>→</span></p>
+            </div>
+
+        </div>
+
+        <button class="slide-btn next">❯</button>
+
+    </div>
+
+    <div class="rek-div">
+        <img src="/img/image-removebg-preview (10).png" alt="" class="rek-div-img">
+        <img src="/img/image-removebg-preview (11).png" alt="" class="rek-div-img">
+        <img src="/img/image-removebg-preview (12).png" alt="" class="rek-div-img">
+        <img src="/img/image-removebg-preview (13).png" alt="" class="rek-div-img">
+    </div>
+
+    <div class="hands">
+
+        <div class="hands-div">
+            <h2 class="hands-div-h2">
+                <span style="color:#222222;">Crafted by Hands.</span> <br>
+                <span style="color:#B08A5A;"> Inspired by Heritage.</span>
+            </h2>
+            <p>
+                Every product tells a story of tradition, passion,<br>
+                and timeless artistry passed down through generations.
+            </p>
+            <button class="explore-btn">
+                LEARN OUR STORY
+                <span>→</span>
+            </button>
+        </div>
+        
+    </div>
+
+    <h2 class="why-h2">WHY CHOOSE UZCRAFT?</h2>
+    <div class="container-img">
+        <img src="/img/image-removebg-preview (15).png" alt="" class="why-img">
+    </div>
+    <div class="div-why-p">
+        <p class="why-p">We are dedicated to preserving Uzbekistan's rich heritage</p>
+        <p class="why-p">and bringing its beauty to the world.</p>
+    </div>
+
+    <div class="logos">
+        <div class="logos-track">
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+
+            <img class="logos-cart" src="/img/image-removebg-preview (16).png">
+            <img class="logos-cart" src="/img/image-removebg-preview (17).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (18).png">
+            <img class="logos-cart1" src="/img/image-removebg-preview (19).png">
+        </div>
+    </div>
+    <div class="hr1">
+        <hr class="hr-1">
+    </div>
+
+    <h2 class="why-h2">BESTSELLERS</h2>
+    <div class="container-img">
+        <img src="/img/image-removebg-preview (15).png" alt="" class="why-img">
+    </div>
+    <p class="sellers">Loved by our curtomers worldwide.</p>
+
+
+    <div class="craft-categories-wrapper">
+
+        <button class="craft-slide-btn craft-prev">❮</button>
+
+        <div class="craft-categories-container">
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/bf20a979-31d1-4e1d-ac3c-0d01b3a4c2b6.png">
+                <h4>Ceramics Plate & Bowl Set</h4>
+                <p>$45.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/7aafaf45-2736-48c9-bb76-5dfacc75b4b8.png">
+                <h4>Traditional ikat Fabric</h4>
+                <p>$35.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/94784332-ba68-4b40-8efb-ce9c0e0035c8.png">
+                <h4>Handcrafted Wooden Box</h4>
+                <p>$55.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/52849f0c-48cd-4bdc-bd78-2530da3e0045.png">
+                <h4>Silver Pendant Necklace</h4>
+                <p>$65.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/25fc3c18-96cd-47b3-918e-9d41935cf140.png">
+                <h4>Embroidered Skullcap</h4>
+                <p>$25.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+            <div class="craft-category-card">
+                <img class="craft-category-img" src="/img/bf20a979-31d1-4e1d-ac3c-0d01b3a4c2b6.png">
+                <h4>Ceramics Plate & Bowl Set</h4>
+                <p>$45.00<i class="fa-solid fa-bag-shopping"></i></p>
+            </div>
+
+        </div>
+
+        <button class="craft-slide-btn craft-next">❯</button>
+
+    </div>
+
+    <div class="sellers-btn">
+        <button class="sellers-btn-1">VIEW ALL PRODUCTS <span>→</span></button>
+    </div>
+
+    <div class="promo-slider">
+
+        <button class="promo-btn promo-prev">❮</button>
+
+        <div class="promo-track">
+
+            <div class="promo-slide">
+                <img src="/img/figma 1.png" alt="">
+            </div>
+
+            <div class="promo-slide">
+                <img src="/img/figma 2.png" alt="">
+            </div>
+
+            <div class="promo-slide">
+                <img src="/img/figma 3.png" alt="">
+            </div>
+
+        </div>
+
+        <button class="promo-btn promo-next">❯</button>
+
+    </div>
+
+    <div class="promo-dots">
+        <span class="promo-dot active"></span>
+        <span class="promo-dot"></span>
+        <span class="promo-dot"></span>
+    </div>
+    
+    <div class="stay">
+        <div class="stay-div">
+            <h2 class="stay-div-h2">STAY INSPIRED</h2>
+            <p class="stay-div-p">
+                Join our newsletter and be the frist to know <br>
+                about new arrivals, stories, and special offers.
+            </p>
+            <div class="stay-div-in">
+                <input class="ctay-div-input" type="email" placeholder="Enter your email">
+            <button class="stay-div-btn">SUBBCRIBE</button>
+            </div>
+        </div>
+
+        <div class="stay-div">
+            <h2 class="stay-div-h2">FOLLOW US ON INSTAGRAM</h2>
+            <p class="stay-div-p">A glimpse our craft and culture</p>
+            <div class="stay-div-img">
+                <img src="/img/figma 4.png" alt="" class="stay-div-img-1">
+                <img src="/img/figma 7.png" alt="" class="stay-div-img-1">
+                <img src="/img/figma 5.png" alt="" class="stay-div-img-1">
+                <img src="/img/figma 6.png" alt="" class="stay-div-img-1">
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+
+        <div class="footer-top">
+
+            <div class="footer-logo-section">
+                <h2 class="logo">UZCRAFT</h2>
+                <p>
+                    Bringing the authentic spirit of Uzbekistan
+                    to your home through handcrafted goods made
+                    with love and tradition.
+                </p>
+
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h3>SHOP</h3>
+                <a href="#">Ceramics</a>
+                <a href="#">Textiles</a>
+                <a href="#">Wooden Crafts</a>
+                <a href="#">Jewelry</a>
+                <a href="#">Accessories</a>
+                <a href="#">Gift Ideas</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>CUSTOMER SERVICE</h3>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping & Delivery</a>
+                <a href="#">Returns & Exchanges</a>
+                <a href="#">Track Your Order</a>
+                <a href="#">Contact Us</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>COMPANY</h3>
+                <a href="#">About Us</a>
+                <a href="#">Our Story</a>
+                <a href="#">Artisan Partnerships</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+
+            <div class="footer-column newsletter">
+                <h3>NEWSLETTER</h3>
+
+                <p>
+                    Subscribe to get special offers,
+                    new arrivals and stories.
+                </p>
+
+                <div class="newsletter-box">
+                    <input type="email" placeholder="Enter your email">
+                    <button>→</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>© 2024 Uzcraft. All rights reserved.</p>
+
+            <div class="footer-features">
+                <span>🔒 Secure payment</span>
+                <span>↩ 14-day returns</span>
+                <span>🛡 Quality guaranteed</span>
+            </div>
+
+            <div class="language">
+                EN ▼
+            </div>
+
+        </div>
+
+    </footer>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+<script src="../js/chat-widget.js"></script>
+<script src="../js/main.js"></script>
+<script src="/admin/js/app-core.js"></script>
+<script src="/admin/js/page-settings.js"></script>
+<script src="../js/client-actions.js"></script>
+</body>
+</html>

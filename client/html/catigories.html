@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/catigories.css">
+    <link rel="icon" href="/img/f39c7b05-a1e3-4123-b077-35e9f6dd4903.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100">
+                <!-- Tashqi shakl -->
+                <polygon
+                    points="50,5 65,20 85,20 80,40 95,50 80,60 85,80 65,80 50,95 35,80 15,80 20,60 5,50 20,40 15,20 35,20"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <!-- Ichki naqsh -->
+                <circle cx="50" cy="50" r="6"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="18"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="2"
+                />
+
+                <circle cx="50" cy="50" r="30"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <!-- Gul yaproqlari -->
+                <ellipse cx="50" cy="20" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="50" cy="80" rx="5" ry="10"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="20" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="80" cy="50" rx="10" ry="5"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="30" rx="5" ry="10"
+                    transform="rotate(-45 30 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="30" rx="5" ry="10"
+                    transform="rotate(45 70 30)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="30" cy="70" rx="5" ry="10"
+                    transform="rotate(45 30 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+
+                <ellipse cx="70" cy="70" rx="5" ry="10"
+                    transform="rotate(-45 70 70)"
+                    fill="none"
+                    stroke="#B08A5A"
+                    stroke-width="1.5"
+                />
+            </svg>
+
+            <div class="brand-text">
+                <h1>UZCRAFT</h1>
+                <p>MADE IN UZBEKISTAN</p>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+
+            <li><a href="../html/index.html" data-key="home">Home</a></li>
+            <li><a href="../html/collection.html" data-key="collections">Collections</a></li>
+            <li><a data-key="new" class="active" href="../html/catigories.html">Categories</a></li>
+            <li><a data-key="about" href="../html/about.html">About</a></li>
+            <li><a data-key="contact" href="../html/contact.html">Contact</a></li>
+
+        </ul>
+
+        <div class="nav-icons">
+
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-user" id="userIcon" style="cursor:pointer;"></i>
+            <span id="userName"></span>
+
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-overlay"></div>
+    </nav>
+
+    <section class="categories-banner">
+
+        <div class="categories-content">
+
+            <h2>CATEGORIES</h2>
+
+            <div class="divider">
+                <span></span>
+                <i>✦</i>
+                <span></span>
+            </div>
+
+            <p>
+                Explore our wide range of handcrafted
+                collections, each telling a story of
+                heritage, skill and timeless beauty.
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="categories">
+
+        <div class="category-card" data-link="/client/product/html/ceramics.html">
+            <img src="/img/imge 53.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>CERAMICS</h3>
+                    <p>120+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/textiles.html">
+            <img src="/img/image 54.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>TEXTILES</h3>
+                    <p>95+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/jewelry.html">
+            <img src="/img/image 55.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>JEWELRY</h3>
+                    <p>80+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/home.html">
+            <img src="/img/image 56.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>HOME DECOR</h3>
+                    <p>110+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/wooden.html">
+            <img src="/img/image 57.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>WOOD CRAFTS</h3>
+                    <p>70+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/metalware.html">
+            <img src="/img/image 58.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>METALWARE</h3>
+                    <p>60+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/accessories.html">
+            <img src="/img/image 59.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>ACCESSORIES</h3>
+                    <p>50+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/bags.html">
+            <img src="/img/image 60.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>BAGS</h3>
+                    <p>45+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/stationery.html">
+            <img src="/img/image 61.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>STATIONERY</h3>
+                    <p>35+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/gifts.html">
+            <img src="/img/image 62.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>GIFTS</h3>
+                    <p>90+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/rugs.html">
+            <img src="/img/image 63.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>RUGS & CARPETS</h3>
+                    <p>75+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+        <div class="category-card" data-link="/client/product/html/traditional.html">
+            <img src="/img/image 64.png" alt="">
+            <div class="card-content">
+                <div>
+                    <h3>TRADITIONAL CLOTHING</h3>
+                    <p>40+ Items</p>
+                </div>
+                <button>→</button>
+            </div>
+        </div>
+
+    </section>
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="../js/chat-widget.js"></script>
+    <script src="../js/catigories.js"></script>
+<script src="/admin/js/app-core.js"></script>
+<script src="/admin/js/page-settings.js"></script>
+<script src="../js/client-actions.js"></script>
+</body>
+</html>

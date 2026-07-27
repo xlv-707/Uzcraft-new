@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UZCRAFT — Enterprise Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/theme.css">
+<style>
+/* ============================================================
+   CSS VARIABLES & THEMING
+   ============================================================ */
+:root {
+    /* Primary Colors */
+    --primary: #315236;
+    --primary-dark: #1f3a26;
+    --primary-light: #4a7a52;
+    --primary-gradient: linear-gradient(135deg, #315236, #4a7a52);
+    
+    /* Luxury Gold */
+    --gold: #B08A5A;
+    --gold-light: #D4B896;
+    --gold-dark: #8A6E46;
+    --gold-gradient: linear-gradient(135deg, #B08A5A, #D4B896);
+    
+    /* Neutral Colors */
+    --bg-primary: #f5f7fb;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f0f2f8;
+    --bg-card: #ffffff;
+    
+    /* Text Colors */
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #a0aec0;
+    --text-light: #ffffff;
+    
+    /* Borders */
+    --border-color: rgba(0, 0, 0, 0.06);
+    --border-light: rgba(0, 0, 0, 0.04);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+    --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.12);
+    --shadow-gold: 0 8px 30px rgba(176, 138, 90, 0.2);
+    
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s ease;
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Sidebar */
+    --sidebar-width: 280px;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+[data-theme="dark"] {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #1c2333;
+    --bg-card: #1c2333;
+    
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --text-muted: #484f58;
+    
+    --border-color: rgba(255, 255, 255, 0.06);
+    --border-light: rgba(255, 255, 255, 0.04);
+    
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.6);
+    
+    --glass-bg: rgba(28, 35, 51, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    transition: background var(--transition-slow), color var(--transition-slow);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: var(--spacing-lg) var(--spacing-md);
+    overflow-y: auto;
+    transition: transform var(--transition-slow), background var(--transition-slow);
+    z-index: 1000;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.sidebar .logo-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    box-shadow: var(--shadow-gold);
+    flex-shrink: 0;
+}
+
+.sidebar .logo h2 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar .nav-section {
+    margin-top: var(--spacing-xl);
+}
+
+.sidebar .nav-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.sidebar .menu-item {
+    height: 46px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    padding: 0 var(--spacing-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    margin-bottom: 2px;
+}
+
+.sidebar .menu-item i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+}
+
+.sidebar .menu-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.sidebar .menu-item.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: var(--shadow-gold);
+}
+
+.sidebar .menu-item.active i {
+    color: #fff;
+}
+
+.sidebar .menu-item .badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+}
+
+.sidebar .arrow {
+    margin-left: auto;
+    transition: transform var(--transition-base);
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.sidebar .arrow.rotate { transform: rotate(180deg); }
+
+.sidebar .submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow);
+    margin-left: var(--spacing-lg);
+    padding-left: var(--spacing-md);
+    border-left: 2px solid var(--border-color);
+}
+
+.sidebar .submenu.show { max-height: 200px; }
+
+.sidebar .submenu-item {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 13px;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
+    padding-left: var(--spacing-sm);
+}
+
+.sidebar .submenu-item:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    transform: translateX(4px);
+}
+
+.sidebar .submenu-item.active {
+    color: var(--gold);
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+.main {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    background: var(--bg-primary);
+    transition: background var(--transition-slow);
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+    height: 72px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xl);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: background var(--transition-slow);
+}
+
+.topbar .menu-btn {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 22px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.topbar .menu-btn:hover {
+    background: var(--bg-tertiary);
+}
+
+.topbar .search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.topbar .search-wrapper i {
+    position: absolute;
+    left: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 16px;
+}
+
+.topbar .search-wrapper input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    padding: 0 var(--spacing-lg) 0 44px;
+    font-size: 14px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.topbar .search-wrapper input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(176, 138, 90, 0.1);
+    background: var(--bg-secondary);
+}
+
+.topbar .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.topbar .icon-btn {
+    width: 42px;
+    height: 42px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 18px;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.topbar .icon-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.topbar .badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    background: #e53e3e;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-secondary);
+}
+
+.topbar .admin-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 4px 12px 4px 4px;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+}
+
+.topbar .admin-btn:hover {
+    background: var(--bg-tertiary);
+}
+
+.topbar .admin-btn .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--gold-gradient);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.topbar .admin-btn .admin-info {
+    text-align: left;
+    line-height: 1.2;
+}
+
+.topbar .admin-btn .admin-info h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.topbar .admin-btn .admin-info p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.topbar .dropdown {
+    position: relative;
+}
+
+.topbar .dropdown-menu {
+    position: absolute;
+    top: calc(100% + var(--spacing-sm));
+    right: 0;
+    min-width: 280px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    display: none;
+    overflow: hidden;
+    z-index: 999;
+    padding: var(--spacing-sm);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.topbar .dropdown.active .dropdown-menu {
+    display: block;
+    animation: dropIn 0.25s ease;
+}
+
+@keyframes dropIn {
+    from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.topbar .dropdown-menu .dropdown-header {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.topbar .dropdown-menu .dropdown-header h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.topbar .dropdown-menu .dropdown-header p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.topbar .dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+}
+
+.topbar .dropdown-menu a:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.topbar .dropdown-menu a i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.topbar .dropdown-menu .divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--spacing-sm) 0;
+}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.content {
+    padding: var(--spacing-xl) var(--spacing-xl) 0;
+}
+
+/* ============================================================
+   DASHBOARD HEADER
+   ============================================================ */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.dashboard-header .header-left h1 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+}
+
+.dashboard-header .header-left h1 span {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.dashboard-header .header-left p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin-top: 4px;
+}
+
+.dashboard-header .header-right {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.dashboard-header .date-btn {
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    padding: 10px 18px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all var(--transition-base);
+}
+
+.dashboard-header .date-btn:hover {
+    border-color: var(--gold);
+    box-shadow: var(--shadow-gold);
+}
+
+/* ============================================================
+   STATS GRID
+   ============================================================ */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gold-gradient);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+}
+
+.stat-card .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.stat-card .stat-icon.green { background: #e6f7ee; color: #0f7b3a; }
+.stat-card .stat-icon.orange { background: #fef3e2; color: #e68a00; }
+.stat-card .stat-icon.purple { background: #f0ebff; color: #6b3fd4; }
+.stat-card .stat-icon.blue { background: #e6f0ff; color: #1a6bd4; }
+.stat-card .stat-icon.red { background: #fde8e8; color: #d43a3a; }
+
+[data-theme="dark"] .stat-card .stat-icon.green { background: rgba(15, 123, 58, 0.2); }
+[data-theme="dark"] .stat-card .stat-icon.orange { background: rgba(230, 138, 0, 0.2); }
+[data-theme="dark"] .stat-card .stat-icon.purple { background: rgba(107, 63, 212, 0.2); }
+[data-theme="dark"] .stat-card .stat-icon.blue { background: rgba(26, 107, 212, 0.2); }
+[data-theme="dark"] .stat-card .stat-icon.red { background: rgba(212, 58, 58, 0.2); }
+
+.stat-card .stat-content {
+    flex: 1;
+}
+
+.stat-card .stat-content span {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card .stat-content h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 4px 0 2px;
+    letter-spacing: -0.5px;
+}
+
+.stat-card .stat-content .trend {
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-card .stat-content .trend.up { color: #16a34a; }
+.stat-card .stat-content .trend.down { color: #ef4444; }
+
+/* ============================================================
+   DASHBOARD BOTTOM
+   ============================================================ */
+.dashboard-bottom {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.sales-chart,
+.summary-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-slow);
+}
+
+.sales-chart:hover,
+.summary-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-header h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.card-header .card-action {
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: all var(--transition-fast);
+}
+
+.card-header .card-action:hover {
+    color: var(--gold-dark);
+    text-decoration: underline;
+}
+
+.chart-container {
+    height: 280px;
+    width: 100%;
+}
+
+.summary-card .donut-container {
+    width: 200px;
+    height: 200px;
+    margin: var(--spacing-md) auto var(--spacing-sm);
+}
+
+.summary-list {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.summary-list .summary-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.summary-list .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+}
+
+.summary-list .dot.green-dot { background: #1f8f45; }
+.summary-list .dot.orange-dot { background: #f0b01f; }
+.summary-list .dot.red-dot { background: #ff6b6b; }
+
+/* ============================================================
+   DASHBOARD LISTS
+   ============================================================ */
+.dashboard-lists {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.list-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg) var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-slow);
+}
+
+.list-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.list-card .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.list-card .list-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.list-card .list-header .view-all-btn {
+    color: var(--gold);
+    background: none;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.list-card .list-header .view-all-btn:hover {
+    color: var(--gold-dark);
+    text-decoration: underline;
+}
+
+.order-item,
+.product-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-light);
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
+}
+
+.order-item:last-child,
+.product-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover,
+.product-item:hover {
+    background: var(--bg-tertiary);
+    padding: var(--spacing-sm) var(--spacing-sm);
+    margin: 0 calc(-1 * var(--spacing-sm));
+}
+
+.order-item img,
+.product-item img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    background: var(--bg-tertiary);
+}
+
+.order-item .order-info,
+.product-item .product-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.order-item .order-info h4,
+.product-item .product-info h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-item .order-info p,
+.product-item .product-info p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.order-item .status {
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.order-item .status.completed { background: #e6f7ee; color: #0f7b3a; }
+.order-item .status.processing { background: #fef3e2; color: #cc7a00; }
+.order-item .status.pending { background: #fde8e8; color: #cc3a3a; }
+.order-item .status.shipped { background: #e6f0ff; color: #1a6bd4; }
+.order-item .status.cancelled { background: #f0f0f0; color: var(--text-muted); }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-2xl);
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-xl);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modal-header h2 span {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.modal-close {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    background: var(--border-color);
+    color: var(--text-primary);
+}
+
+.modal-body .modal-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-body .modal-item:last-child {
+    border-bottom: none;
+}
+
+.modal-body .modal-item img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    background: var(--bg-tertiary);
+}
+
+.modal-body .modal-item .item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-body .modal-item .item-info h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-body .modal-item .item-info p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.modal-body .modal-item .status {
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.modal-body .modal-item .status.completed { background: #e6f7ee; color: #0f7b3a; }
+.modal-body .modal-item .status.processing { background: #fef3e2; color: #cc7a00; }
+.modal-body .modal-item .status.pending { background: #fde8e8; color: #cc3a3a; }
+.modal-body .modal-item .status.shipped { background: #e6f0ff; color: #1a6bd4; }
+.modal-body .modal-item .status.cancelled { background: #f0f0f0; color: var(--text-muted); }
+
+.modal-footer {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+    text-align: right;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1400px) {
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .dashboard-lists { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1200px) {
+    .dashboard-bottom { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+        background: var(--bg-secondary);
+        box-shadow: var(--shadow-xl);
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .main { margin-left: 0; }
+    .topbar .menu-btn { display: block; }
+    .topbar .search-wrapper { display: none; }
+    .topbar .admin-btn .admin-info { display: none; }
+    .topbar .admin-btn { padding: 4px; }
+    .dashboard-lists { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .topbar { padding: 0 var(--spacing-md); }
+    .content { padding: var(--spacing-md) var(--spacing-md) 0; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .dashboard-header .header-left h1 { font-size: 24px; }
+    .dashboard-header .header-right .date-btn { font-size: 12px; padding: 8px 12px; }
+    .modal { padding: var(--spacing-md); }
+    .topbar .dropdown-menu { right: -60px; min-width: 240px; }
+}
+
+@media (max-width: 400px) {
+    .topbar .topbar-right { gap: 2px; }
+    .topbar .icon-btn { width: 36px; height: 36px; font-size: 15px; }
+    .topbar .admin-btn .avatar { width: 30px; height: 30px; font-size: 12px; }
+    .dashboard-header .header-left h1 { font-size: 20px; }
+}
+
+.sidebar.show { transform: translateX(0); }
+
+/* ============================================================
+   LOADING SKELETON
+   ============================================================ */
+.skeleton {
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+}
+
+@keyframes skeletonPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.text-gold { color: var(--gold); }
+.bg-gold { background: var(--gold-gradient); }
+.shadow-gold { box-shadow: var(--shadow-gold); }
+.radius-full { border-radius: var(--radius-full); }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+</style>
+</head>
+<body>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">📋 <span>All</span> Items</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- Dynamic content -->
+        </div>
+        <div class="modal-footer" id="modalFooter">
+            Showing all items
+        </div>
+    </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="logo">
+        <div class="logo-icon">U</div>
+        <h2>UZCRAFT</h2>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Main</div>
+        <a href="../html/dashboard.html" class="menu-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Commerce</div>
+        <div class="product-section">
+            <div class="menu-item" id="productsBtn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>Products</span>
+                <i class="fa-solid fa-chevron-down arrow"></i>
+            </div>
+            <div class="submenu" id="productsSubmenu">
+                <a href="../html/all-products.html" class="submenu-item">All Products</a>
+                <a href="../html/admin-product-stock.html" class="submenu-item">Add Product</a>
+            </div>
+        </div>
+        <a href="../html/orders.html" class="menu-item">
+            <i class="fa-solid fa-box"></i>
+            <span>Orders</span>
+            <span class="badge">12</span>
+        </a>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-label">Management</div>
+        <a href="../html/users.html" class="menu-item">
+            <i class="fa-solid fa-users"></i>
+            <span>Users</span>
+        </a>
+        <a href="../html/settings.html" class="menu-item">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Settings</span>
+        </a>
+    </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+    <!-- ===== TOPBAR ===== -->
+    <header class="topbar" role="banner">
+        <button id="menuBtn" class="menu-btn" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="search-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search dashboard..." aria-label="Search">
+        </div>
+
+        <div class="topbar-right">
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                <i class="fa-regular fa-moon"></i>
+            </button>
+
+            <div class="dropdown">
+                <button class="icon-btn dropdown-btn" aria-label="Notifications">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge">5</span>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <h4>Notifications</h4>
+                        <p>You have 5 unread notifications</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Order</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">#ORD-2024 from John Doe</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;border-bottom:1px solid var(--border-color);">
+                        <strong style="font-size:13px;color:var(--text-primary);">New Customer</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">Jane Smith registered</p>
+                    </div>
+                    <div class="notification-item" style="padding:10px 16px;">
+                        <strong style="font-size:13px;color:var(--text-primary);">Product Updated</strong>
+                        <p style="font-size:12px;color:var(--text-muted);">3 products updated</p>
+                    </div>
+                    <div class="divider"></div>
+                    <a href="#"><i class="fa-regular fa-bell"></i> View all notifications</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="admin-btn dropdown-btn">
+                    <div class="avatar">A</div>
+                    <div class="admin-info">
+                        <h4>Admin</h4>
+                        <p>Super Admin</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--text-muted);"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#"><i class="fa-regular fa-user"></i> Profile</a>
+                    <a href="../html/settings.html"><i class="fa-regular fa-gear"></i> Settings</a>
+                    <div class="divider"></div>
+                    <a href="#" id="logoutBtn" style="color:#e53e3e;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== CONTENT ===== -->
+    <div class="content">
+
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <h1>Dashboard <span>✨</span></h1>
+                <p>Welcome back, Admin! Here's what's happening with your store today.</p>
+            </div>
+            <div class="header-right">
+                <button class="date-btn">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="dateRange">May 15 - May 21, 2024</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fa-solid fa-dollar-sign"></i></div>
+                <div class="stat-content">
+                    <span>Total Sales</span>
+                    <h2 id="totalSales">$0</h2>
+                    <span class="trend up" id="salesPercent"><i class="fa-solid fa-arrow-up"></i> 0%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fa-solid fa-bag-shopping"></i></div>
+                <div class="stat-content">
+                    <span>Total Orders</span>
+                    <h2 id="totalOrders">0</h2>
+                    <span class="trend up" id="ordersPercent"><i class="fa-solid fa-arrow-up"></i> 0%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fa-solid fa-cube"></i></div>
+                <div class="stat-content">
+                    <span>Total Products</span>
+                    <h2 id="totalProducts">0</h2>
+                    <span class="trend up" id="productsPercent"><i class="fa-solid fa-arrow-up"></i> 0%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-content">
+                    <span>Total Customers</span>
+                    <h2 id="totalCustomers">0</h2>
+                    <span class="trend up" id="usersPercent"><i class="fa-solid fa-arrow-up"></i> 0%</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fa-regular fa-clock"></i></div>
+                <div class="stat-content">
+                    <span>Pending Orders</span>
+                    <h2 id="pendingOrders">0</h2>
+                    <span class="trend down" id="pendingPercent"><i class="fa-solid fa-arrow-down"></i> 0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Bottom -->
+        <div class="dashboard-bottom">
+            <div class="sales-chart">
+                <div class="card-header">
+                    <h3>📈 Sales Overview</h3>
+                    <button class="card-action">View Report →</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            <div class="summary-card">
+                <h3 style="text-align:center;font-size:17px;font-weight:700;color:var(--text-primary);">📊 Store Summary</h3>
+                <div class="donut-container">
+                    <canvas id="summaryChart"></canvas>
+                </div>
+                <div class="summary-list">
+                    <span class="summary-item"><span class="dot green-dot"></span> Completed</span>
+                    <span class="summary-item"><span class="dot orange-dot"></span> Processing</span>
+                    <span class="summary-item"><span class="dot red-dot"></span> Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Lists -->
+        <div class="dashboard-lists">
+
+            <!-- Recent Orders -->
+            <div class="list-card">
+                <div class="list-header">
+                    <h3>🕐 Recent Orders</h3>
+                    <button class="view-all-btn" onclick="openModal('orders')">View All →</button>
+                </div>
+                <div id="recentOrders"></div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="list-card">
+                <div class="list-header">
+                    <h3>🏆 Top Products</h3>
+                    <button class="view-all-btn" onclick="openModal('products')">View All →</button>
+                </div>
+                <div id="topProducts"></div>
+            </div>
+
+            <!-- Low Stock -->
+            <div class="list-card">
+                <div class="list-header">
+                    <h3>⚠️ Low Stock</h3>
+                    <button class="view-all-btn" onclick="openModal('lowstock')">View All →</button>
+                </div>
+                <div id="lowStockProducts"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="../js/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// ============================================================
+// MODAL FUNCTIONS
+// ============================================================
+const modalOverlay = document.getElementById('modalOverlay');
+const modalBody = document.getElementById('modalBody');
+const modalTitle = document.getElementById('modalTitle');
+const modalFooter = document.getElementById('modalFooter');
+
+let allOrdersData = [];
+let allProductsData = [];
+let allLowStockData = [];
+
+function openModal(type) {
+    let title = '';
+    let items = [];
+    let footerText = '';
+
+    switch(type) {
+        case 'orders':
+            title = '📋 <span>All Orders</span>';
+            items = allOrdersData;
+            footerText = `Showing all ${items.length} orders`;
+            break;
+        case 'products':
+            title = '🏆 <span>All Products</span>';
+            items = allProductsData;
+            footerText = `Showing all ${items.length} products`;
+            break;
+        case 'lowstock':
+            title = '⚠️ <span>Low Stock Products</span>';
+            items = allLowStockData;
+            footerText = `Showing ${items.length} low stock products`;
+            break;
+        default:
+            return;
+    }
+
+    modalTitle.innerHTML = title;
+    modalFooter.textContent = footerText;
+
+    modalBody.innerHTML = '';
+    
+    if (items.length === 0) {
+        modalBody.innerHTML = `
+            <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+                <i class="fa-regular fa-circle" style="font-size:40px;display:block;margin-bottom:12px;"></i>
+                <h3 style="color:var(--text-secondary);font-size:18px;">No items found</h3>
+                <p style="font-size:14px;">There are no items to display</p>
+            </div>
+        `;
+    } else {
+        items.forEach(item => {
+            const image = item.image || item.images?.[0] || 'https://placehold.co/52/f0f2f8/8f8f8f?text=No+Image';
+            let statusHtml = '';
+            
+            if (item.status) {
+                const statusClass = item.status === 'completed' || item.status === 'published' ? 'completed' :
+                                   item.status === 'processing' || item.status === 'draft' ? 'processing' : 
+                                   item.status === 'shipped' ? 'shipped' :
+                                   item.status === 'cancelled' ? 'cancelled' : 'pending';
+                const statusText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+                statusHtml = `<span class="status ${statusClass}">${statusText}</span>`;
+            }
+
+            modalBody.innerHTML += `
+                <div class="modal-item">
+                    <img src="${image}" alt="${item.name || item.product || 'Item'}">
+                    <div class="item-info">
+                        <h4>${item.name || item.product || 'Unnamed'}</h4>
+                        <p>${item.category || item.customer || ''} ${item.price ? '• $' + item.price : ''} ${item.stock !== undefined ? '• Stock: ' + item.stock : ''}</p>
+                    </div>
+                    ${statusHtml}
+                </div>
+            `;
+        });
+    }
+
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeModal();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
+});
+
+// ============================================================
+// PRODUCTS SUBMENU
+// ============================================================
+const productsBtn = document.getElementById("productsBtn");
+const productsSubmenu = document.getElementById("productsSubmenu");
+const arrow = document.querySelector(".arrow");
+
+productsBtn.addEventListener("click", () => {
+    productsSubmenu.classList.toggle("show");
+    arrow.classList.toggle("rotate");
+});
+
+// ============================================================
+// DROPDOWNS
+// ============================================================
+document.querySelectorAll(".dropdown-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const dropdown = btn.closest(".dropdown");
+        document.querySelectorAll(".dropdown").forEach(item => {
+            if (item !== dropdown) item.classList.remove("active");
+        });
+        dropdown.classList.toggle("active");
+    });
+});
+
+document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown").forEach(item => {
+        item.classList.remove("active");
+    });
+});
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+
+menuBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("show");
+});
+
+document.addEventListener("click", (e) => {
+    if (window.innerWidth <= 992) {
+        if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+            sidebar.classList.remove("show");
+        }
+    }
+});
+
+// ============================================================
+// LOGOUT
+// ============================================================
+document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("currentUser");
+    window.location.href = "/login/html/index.html";
+});
+
+// ============================================================
+// THEME TOGGLE
+// ============================================================
+
+// ============================================================
+// CHARTS
+// ============================================================
+let salesChartInstance = null;
+let summaryChartInstance = null;
+
+function initCharts(ordersData) {
+    const salesCtx = document.getElementById("salesChart");
+    if (salesChartInstance) salesChartInstance.destroy();
+    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weeklyData = [0, 0, 0, 0, 0, 0, 0];
+    
+    if (ordersData && ordersData.length > 0) {
+        ordersData.forEach(order => {
+            const date = new Date(order.createdAt || order.date || order.timestamp);
+            if (!isNaN(date.getTime())) {
+                const dayIndex = date.getDay();
+                weeklyData[dayIndex] += Number(order.total || order.price || 0);
+            }
+        });
+    }
+    
+    const hasData = weeklyData.some(v => v > 0);
+    const dataPoints = hasData ? weeklyData : [1200, 3500, 6200, 3400, 5300, 7000, 3100];
+
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    const textColor = isDarkMode ? '#8b949e' : '#718096';
+    const gridColor = isDarkMode ? 'rgba(255,255,255,0.06)' : '#edf2f7';
+
+    salesChartInstance = new Chart(salesCtx, {
+        type: "line",
+        data: {
+            labels: days,
+            datasets: [{
+                data: dataPoints,
+                borderColor: "#315236",
+                backgroundColor: "rgba(49, 82, 54, 0.08)",
+                fill: true,
+                tension: 0.4,
+                pointRadius: 6,
+                pointBackgroundColor: "#315236",
+                pointBorderColor: "#fff",
+                pointBorderWidth: 2,
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false } 
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true, 
+                    grid: { color: gridColor }, 
+                    ticks: { font: { size: 12 }, color: textColor } 
+                },
+                x: { 
+                    grid: { display: false }, 
+                    ticks: { font: { size: 12 }, color: textColor } 
+                }
+            }
+        }
+    });
+
+    const donutCtx = document.getElementById("summaryChart");
+    if (summaryChartInstance) summaryChartInstance.destroy();
+    
+    let completed = 0, processing = 0, pending = 0;
+    
+    if (ordersData && ordersData.length > 0) {
+        ordersData.forEach(order => {
+            const status = order.status || 'pending';
+            if (status === 'completed') completed++;
+            else if (status === 'processing') processing++;
+            else if (status === 'shipped') processing++;
+            else if (status === 'pending') pending++;
+            else if (status === 'cancelled') pending++;
+        });
+    }
+    
+    const totalOrders = ordersData ? ordersData.length : 0;
+    if (totalOrders === 0) {
+        completed = 70;
+        processing = 20;
+        pending = 10;
+    }
+
+    summaryChartInstance = new Chart(donutCtx, {
+        type: "doughnut",
+        data: {
+            labels: ["Completed", "Processing", "Pending"],
+            datasets: [{
+                data: [completed, processing, pending],
+                backgroundColor: ["#1f8f45", "#f0b01f", "#ff6b6b"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: "70%",
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+
+// ============================================================
+// DASHBOARD STATS
+// ============================================================
+async function loadDashboardStats() {
+    try {
+        const response = await fetch("http://localhost:3000/dashboard-stats");
+        const data = await response.json();
+
+        document.getElementById("totalSales").innerText = "$" + data.totalSales;
+        document.getElementById("totalOrders").innerText = data.totalOrders;
+        document.getElementById("totalProducts").innerText = data.totalProducts;
+        document.getElementById("totalCustomers").innerText = data.totalUsers;
+        document.getElementById("pendingOrders").innerText = data.pendingOrders;
+
+        document.getElementById("salesPercent").innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${data.salesPercent || 0}%`;
+        document.getElementById("ordersPercent").innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${data.ordersPercent || 0}%`;
+        document.getElementById("productsPercent").innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${data.productsPercent || 0}%`;
+        document.getElementById("usersPercent").innerHTML = `<i class="fa-solid fa-arrow-up"></i> ${data.usersPercent || 0}%`;
+        
+        const pendingPct = data.pendingPercent || 0;
+        document.getElementById("pendingPercent").innerHTML = 
+            `<i class="fa-solid fa-arrow-${pendingPct > 0 ? 'up' : 'down'}"></i> ${Math.abs(pendingPct)}%`;
+            
+        return data;
+    } catch (error) {
+        console.log("Dashboard stats error:", error);
+        return null;
+    }
+}
+
+// ============================================================
+// LOAD ORDERS FROM API
+// ============================================================
+async function loadOrders() {
+    try {
+        const response = await fetch("http://localhost:3000/orders");
+        if (!response.ok) throw new Error("Failed to fetch orders");
+        const orders = await response.json();
+        return orders;
+    } catch (error) {
+        console.log("Orders load error:", error);
+        return [];
+    }
+}
+
+// ============================================================
+// LOAD PRODUCTS
+// ============================================================
+async function loadProducts() {
+    try {
+        const response = await fetch("http://localhost:3000/products");
+        if (!response.ok) throw new Error("Failed to fetch products");
+        const products = await response.json();
+        return products;
+    } catch (error) {
+        console.log("Products load error:", error);
+        return [];
+    }
+}
+
+// ============================================================
+// RENDER ORDERS IN DASHBOARD
+// ============================================================
+function renderOrders(container, orders, limit = 5) {
+    container.innerHTML = '';
+    const displayOrders = orders.slice(0, limit);
+    
+    if (displayOrders.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:20px 0;color:var(--text-muted);font-size:14px;">
+                <i class="fa-regular fa-circle-check"></i> No orders yet
+            </div>
+        `;
+        return;
+    }
+    
+    displayOrders.forEach(order => {
+        const statusClass = order.status || 'pending';
+        const statusText = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+        const customerName = order.username || order.customerName || order.userName || 'Guest';
+        const productName = order.product?.name || order.product || 'Product';
+        const total = order.total || order.product?.price || 0;
+        const image = order.product?.images?.[0] || order.image || 'https://placehold.co/52/f0f2f8/8f8f8f?text=No+Image';
+        
+        container.innerHTML += `
+            <div class="order-item">
+                <img src="${image}" alt="${productName}">
+                <div class="order-info">
+                    <h4>${productName}</h4>
+                    <p>${customerName} • $${Number(total).toFixed(2)}</p>
+                </div>
+                <span class="status ${statusClass}">${statusText}</span>
+            </div>
+        `;
+    });
+    allOrdersData = orders;
+}
+
+// ============================================================
+// RENDER PRODUCTS IN DASHBOARD
+// ============================================================
+function renderTopProducts(container, products, limit = 5) {
+    container.innerHTML = '';
+    const displayProducts = products.slice(0, limit);
+    
+    if (displayProducts.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:20px 0;color:var(--text-muted);font-size:14px;">
+                <i class="fa-regular fa-circle-check"></i> No products yet
+            </div>
+        `;
+        return;
+    }
+    
+    displayProducts.forEach(product => {
+        const image = product.images?.[0] || 'https://placehold.co/52/f0f2f8/8f8f8f?text=No+Image';
+        container.innerHTML += `
+            <div class="product-item">
+                <img src="${image}" alt="${product.name}">
+                <div class="product-info">
+                    <h4>${product.name}</h4>
+                    <p>${product.category || 'Uncategorized'} • $${product.price}</p>
+                </div>
+            </div>
+        `;
+    });
+    allProductsData = products;
+}
+
+// ============================================================
+// RENDER LOW STOCK PRODUCTS
+// ============================================================
+function renderLowStock(container, products, limit = 5) {
+    container.innerHTML = '';
+    const lowStock = products.filter(p => Number(p.stock) <= 10);
+    const displayProducts = lowStock.slice(0, limit);
+    
+    if (displayProducts.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:20px 0;color:var(--text-muted);font-size:14px;">
+                <i class="fa-regular fa-circle-check"></i> All products have sufficient stock
+            </div>
+        `;
+        return;
+    }
+    
+    displayProducts.forEach(product => {
+        const image = product.images?.[0] || 'https://placehold.co/52/f0f2f8/8f8f8f?text=No+Image';
+        container.innerHTML += `
+            <div class="product-item">
+                <img src="${image}" alt="${product.name}">
+                <div class="product-info">
+                    <h4>${product.name}</h4>
+                    <p>Stock: ${product.stock || 0}</p>
+                </div>
+            </div>
+        `;
+    });
+    allLowStockData = lowStock;
+}
+
+// ============================================================
+// INITIALIZE DASHBOARD
+// ============================================================
+async function initDashboard() {
+    await loadDashboardStats();
+    
+    const orders = await loadOrders();
+    const ordersContainer = document.getElementById("recentOrders");
+    renderOrders(ordersContainer, orders);
+    
+    const products = await loadProducts();
+    const topProductsContainer = document.getElementById("topProducts");
+    renderTopProducts(topProductsContainer, products);
+    
+    const lowStockContainer = document.getElementById("lowStockProducts");
+    renderLowStock(lowStockContainer, products);
+    
+    initCharts(orders);
+}
+
+// ============================================================
+// START
+// ============================================================
+document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+<!-- Til tizimi -->
+<script src="../js/lang.js"></script>
+<script src="../js/app-core.js"></script>
+<script src="../js/page-settings.js"></script>
+</body>
+</html>
